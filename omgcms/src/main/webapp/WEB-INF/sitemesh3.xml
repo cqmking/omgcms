@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+	
+	<!-- 
+	<mapping path="/exclude.jsp*" exclue="true"  />
+	 -->
+ 	
+	<mapping path="/admin/*" decorator="/WEB-INF/jsp/admin/decorators/admin-decorator.jsp" />
+	<!-- <mapping path="/admin/*" decorator="/WEB-INF/jsp/admin/decorators/default-decorator.jsp" /> -->
+	
+	<mapping path="/admin/login.do" exclue="true" />
+	<mapping path="/admin/checkLogin.do" exclue="true" />
+	
+</sitemesh>

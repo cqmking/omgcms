@@ -1,0 +1,39 @@
+.skin-blue-light .wrapper,
+.skin-blue-light .main-sidebar,
+.skin-blue-light .left-side {
+    background-color: #f9fafc;
+}
+
+.skin-blue-light .main-header .navbar {
+    background-color: #3c8dbc;
+}
+
+.skin-blue-light .main-header .logo {
+    background-color: #3c8dbc;
+    color: #fff;
+    border-bottom: 0 solid transparent;
+}
+
+.skin-blue-light .main-header .logo:hover {
+    background-color: #367fa9;
+}
+
+.skin-blue-light .wrapper, 
+.skin-blue-light .main-sidebar, 
+.skin-blue-light .left-side {
+    background-color: #f9fafc;
+}
+
+.skin-blue-light .content-wrapper,
+.skin-blue-light .main-footer {
+    border-left: 1px solid #d2d6de;
+}
+.skin-blue-light .main-footer {
+    border-top-color: #d2d6de;
+}
+
+.skin-blue-light .main-header .navbar .sidebar-toggle:hover {
+    background-color: #367fa9;
+}
+
+

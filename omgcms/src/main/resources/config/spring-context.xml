@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+	<!--引入配置属性文件 -->
+	<context:property-placeholder location="classpath:database.properties" />
+
+	<!--自动扫描含有@Service将其注入为bean -->
+	<context:component-scan base-package="com.omgcms.service" />
+	
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<!-- <property name="useCodeAsDefaultMessage" value="true"/> -->
+		<property name="basenames">
+			<list>
+				<value>localization/admin</value>
+				<value>localization/label</value>
+				<value>localization/messages</value>
+			</list>
+		</property>
+		
+	</bean>
+	
+	<!--加载系统配置 -->
+	<bean id="systemConfigPropertyConfigurer" class="com.omgcms.prop.config.SystemConfigPropertyPlaceholderConfigurer">
+		<!--忽略未找到的资源 -->
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath:config.properties</value>
+			</list>
+		</property>
+		<property name="fileEncoding" value="UTF-8" />
+	</bean>
+	
+	
+	<bean id="exceptionResolver" class="com.omgcms.exception.CmsExceptionHandler">
+		<!-- 定义异常处理页面用来获取异常信息的变量名，默认名为exception -->  
+	    <property name="exceptionAttribute" value="exception"></property> 
+		<!--配合自定义的异常解析器 -->
+		<property name="exceptionMappings">
+			<props>
+				<prop key="com.omgcms.exception.CmsRuntimeException">error/500_error</prop>
+				<prop key="java.lang.Exception">error/500_error</prop>
+			</props> 
+		</property>
+	</bean>
+	
+	<!-- 配置多文件上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding">
+			<value>UTF-8</value>
+		</property>
+		<property name="maxUploadSize">
+			<!-- 上传文件大小限制为31M，31*1024*1024 -->
+			<value>32505856</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+		</property>
+	</bean>
+	
+</beans>
+
