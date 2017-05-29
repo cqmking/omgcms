@@ -1,0 +1,100 @@
+.admin.templatemo-bg-gray {
+    background-color: #eee;
+}
+
+.templatemo-bg-gray h1 {
+    color: rgb(74, 164, 180);
+}
+
+.margin-bottom-15 {
+    margin-bottom: 15px;
+}
+
+h1 {
+    font-weight: 300;
+    font-size: 36px;
+    line-height: normal;
+    margin: auto;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.templatemo-container {
+    background-color: rgba(255,255,255,0.8);
+    border: 1px solid #dedede;
+    border-radius: 8px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+.templatemo-login-form-1 {
+    max-width: 500px;
+    border-radius: 2px;
+}
+
+.margin-bottom-30 {
+    margin-bottom: 30px;
+}
+
+.control-wrapper {
+    position: relative;
+    padding-left: 30px;
+}
+
+.control-wrapper label.fa-label {
+    position: absolute;
+    left: 4px;
+    top: 6px;
+}
+
+.form-horizontal .control-label {
+    margin-bottom: 10px;
+}
+
+.form-horizontal .control-label {
+    padding-top: 0;
+}
+
+.container {
+	padding-top:50px;
+}
+
+.container .icon-user,
+.container .icon-lock {
+	font-size: 18px;
+}
+
+.templatemo-login-form-1 a {
+    color: gray;
+}
+
+.templatemo-login-form-1 a:hover {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.form-group a {
+    line-height: 34px;
+}
+
+.templatemo-create-new {
+    color: #58B4BB;
+    font-size: 18px;
+    font-weight: 300;
+    font-family: "SimHei";
+}
+
+.templatemo-create-new:hover {
+    color: #138892;
+    text-decoration: none;
+}
+
+.container .alert-danger {
+	background-color: transparent;
+    margin: 0;
+    padding: 0;
+    margin-left: 30px;
+    margin-bottom: 10px;
+}
+

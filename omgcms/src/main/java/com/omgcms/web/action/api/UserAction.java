@@ -26,7 +26,7 @@ import com.omgcms.web.util.ParamUtil;
 @Controller
 @RequestMapping("/user")
 public class UserAction {
-
+	
 	private Logger logger = LoggerFactory.getLogger(HomeIndexAction.class);
 
 	@Autowired
