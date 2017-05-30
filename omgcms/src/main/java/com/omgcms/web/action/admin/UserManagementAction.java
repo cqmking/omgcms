@@ -2,10 +2,14 @@ package com.omgcms.web.action.admin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.omgcms.model.core.User;
+import com.omgcms.service.UserService;
 
 @Controller
 @RequestMapping("/user")
@@ -13,10 +17,33 @@ public class UserManagementAction {
 
 	private Logger logger = LoggerFactory.getLogger(UserManagementAction.class);
 
-	@RequestMapping("/{page}.do")
-	public String userList(Model model, @PathVariable(value = "page") String page) {
-		logger.debug("Access page[{}].", page);
-		return "admin/user/".concat(page);
+	@Autowired
+	private UserService userService;
+
+	@RequestMapping("/index.do")
+	public String index(Model model) {
+		return "redirect:/admin/user/list.do";
 	}
-	
+
+	@RequestMapping("/list.do")
+	public String userList(Model model) {
+
+		return "admin/user/user_list";
+	}
+
+	@RequestMapping("/edit.do")
+	public String editUser(Model model, @RequestParam(value = "userId", required = false) Long userId) {
+
+		logger.debug("Accss edit user page!");
+
+		if (userId != null && userId > 0) {
+			User user = userService.getUser(userId);
+			model.addAttribute("user", user);
+		}
+
+		model.addAttribute("userId", userId);
+
+		return "admin/user/edit_user";
+	}
+
 }

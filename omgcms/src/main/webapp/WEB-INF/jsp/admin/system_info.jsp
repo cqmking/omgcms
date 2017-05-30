@@ -10,17 +10,22 @@
 <body>
 	
 	<section class="content-header">
-		<h2>
-			<s:message code="label.index.title" /> - <s:message code="label.index.sysinfo.title" />
-		</h2>
+		<ol class="breadcrumb">
+			<li>
+				<a href="${basePath}/admin/index.do"><s:message code="label.common.home" /></a>
+			</li>
+			<li class="active">
+				<s:message code="label.index.sysinfo.title" />
+			</li>
+		</ol>
 	</section>
 
 	<section class="section-content">
 		<table class="table table-bordered">
 			<thead>
 				<tr>
-					<th><s:message code="label.attribute" /></th>
-					<th><s:message code="label.status" /></th>
+					<th><s:message code="label.common.attribute" /></th>
+					<th><s:message code="label.common.status" /></th>
 				</tr>
 			</thead>
 			<tbody>

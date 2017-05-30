@@ -21,6 +21,7 @@ public class HomeIndexAction {
 		return "redirect:/admin/system_info.do";
 	}
 	
+	
 	@RequestMapping("/system_info.do")
 	public String systemInfo(Model model, HttpServletRequest request) {
 

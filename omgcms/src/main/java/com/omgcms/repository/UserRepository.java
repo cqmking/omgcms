@@ -10,5 +10,7 @@ public interface UserRepository extends JpaSpecificationExecutor<User>, JpaRepos
 	// 根据 userAccount 来获取对应的 User
 	public User getByUserAccount(String userAccount);
 	
+	// 根据 userId 获取用户信息
+	public User getByUserId(long userId);
 	
 }

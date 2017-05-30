@@ -29,6 +29,11 @@ public class UserServiceImpl implements UserService {
 	public User getByUserAccount(String userAccount) {
 		return userRepository.getByUserAccount(userAccount);
 	}
+	
+	@Override
+	public User getUser(long userId){
+		return userRepository.getByUserId(userId);
+	}
 
 	@Override
 	public Page<User> findUsers(int pageNo, int pageSize, String orderByProperty, String sortType) {

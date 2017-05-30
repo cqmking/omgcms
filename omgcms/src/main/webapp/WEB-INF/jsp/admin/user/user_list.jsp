@@ -15,14 +15,48 @@
 	 </div>
 	
 	<section class="content-header" v-show="!loading" style="display: none;">
-		<h2>
-			<s:message code="label.user.management" />
-		</h2>
+		<ol class="breadcrumb">
+			<li>
+				<a href="${basePath}/admin/index.do"><s:message code="label.common.home" /></a>
+			</li>
+			<li class="active">
+				<s:message code="label.user.management" />
+			</li>
+		</ol>
 	</section>
 
 	<section class="section-content" v-show="!loading" style="display: none;">
-		
-		<table class="table table-bordered table-hover">
+			
+			<ul class="nav nav-primary">
+				<li class="active">
+					<a href="your/nice/url">首页</a>
+				</li>
+				<li>
+					<a href="your/nice/url">动态 <span class="label label-badge label-success">4</span></a>
+				</li>
+				<li>
+					<a href="your/nice/url">项目 </a>
+				</li>
+				<li>
+					<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><s:message code="label.common.operation" /> <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li>
+							<a href="your/nice/url">任务</a>
+						</li>
+						<li>
+							<a href="your/nice/url">bug</a>
+						</li>
+						<li>
+							<a href="your/nice/url">需求</a>
+						</li>
+						<li>
+							<a href="your/nice/url">用例</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			
+			<table class="table table-bordered table-hover">
 			<thead>
 				<tr>
 					<th><s:message code="label.user.userid" /></th>
