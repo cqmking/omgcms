@@ -1,7 +1,10 @@
 package com.omgcms.exception;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,8 +12,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
+
+import com.omgcms.util.CmsUtil;
 
 public class CmsExceptionHandler extends SimpleMappingExceptionResolver {
 
@@ -37,13 +44,21 @@ public class CmsExceptionHandler extends SimpleMappingExceptionResolver {
 			} else {
 				// 异步方式返回
 				try {
+
 					String exceptionKey = null;
 					String errorMessage = null;
 
 					if (ex instanceof CmsRuntimeException) {
+
 						exceptionKey = ((CmsRuntimeException) ex).getErrorCode();
+						Object[] args = ((CmsRuntimeException) ex).getArgs();
+
 						if (!StringUtils.isBlank(exceptionKey)) {
-							errorMessage = ExceptionI18nMessage.getLocaleMessage(exceptionKey);
+							if (args != null) {
+								errorMessage = ExceptionI18nMessage.getLocaleMessage(exceptionKey, args);
+							} else {
+								errorMessage = ExceptionI18nMessage.getLocaleMessage(exceptionKey);
+							}
 						} else {
 							errorMessage = ex.getMessage();
 						}
@@ -52,24 +67,22 @@ public class CmsExceptionHandler extends SimpleMappingExceptionResolver {
 						errorMessage = ex.getMessage();
 					}
 
-					PrintWriter writer = response.getWriter();
-					writer.write(errorMessage);
-					response.sendError(404, errorMessage);
 					// 将异常栈信息记录到日志中
 					logger.error(getTrace(ex));
-					writer.flush();
+
+					writeResponseForJson(response, errorMessage);
 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
 				// 不进行页面跳转
-				return null;
+				return new ModelAndView();
 
 			}
-		} else {
-			return null;
 		}
+		
+		return new ModelAndView();
+
 	}
 
 	public static String getTrace(Throwable t) {
@@ -78,6 +91,30 @@ public class CmsExceptionHandler extends SimpleMappingExceptionResolver {
 		t.printStackTrace(writer);
 		StringBuffer buffer = stringWriter.getBuffer();
 		return buffer.toString();
+	}
+
+	@SuppressWarnings("unused")
+	private void writeResponse(HttpServletResponse response, String errorMessage) throws IOException {
+
+		PrintWriter writer = response.getWriter();
+		writer.write(errorMessage);
+		// response.sendError(404, errorMessage);
+
+	}
+
+	private void writeResponseForJson(HttpServletResponse response, String errorMessage) throws IOException {
+		
+		response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		response.setCharacterEncoding("UTF-8");
+		response.setHeader("Cache-Control", "no-cache, must-revalidate");
+
+		Map<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("status", "error");
+		resultMap.put("message", errorMessage);
+		
+		response.getWriter().write(CmsUtil.objectToJsonString(resultMap));
+		
 	}
 
 }

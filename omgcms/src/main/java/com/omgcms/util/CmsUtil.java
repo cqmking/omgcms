@@ -52,6 +52,7 @@ public class CmsUtil {
 
 	}
 
+	
 	public static String objectToJsonString(Object dataObject) {
 
 		try {
@@ -70,7 +71,7 @@ public class CmsUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		return "";
 	}
 

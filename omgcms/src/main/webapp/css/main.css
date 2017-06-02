@@ -74,6 +74,7 @@ html, body{
     min-height: 100%;
     position: relative;
     overflow: hidden;
+    padding-bottom: 51px;
 }
 
 .main-header {

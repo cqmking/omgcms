@@ -2,24 +2,21 @@ package com.omgcms.web.action.admin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.omgcms.model.core.User;
-import com.omgcms.service.UserService;
+import com.omgcms.exception.CmsExceptionConstants;
+import com.omgcms.exception.CmsRuntimeException;
+import com.omgcms.web.util.ParamUtil;
 
 @Controller
 @RequestMapping("/user")
 public class UserManagementAction {
 
 	private Logger logger = LoggerFactory.getLogger(UserManagementAction.class);
-
-	@Autowired
-	private UserService userService;
-
+	
 	@RequestMapping("/index.do")
 	public String index(Model model) {
 		return "redirect:/admin/user/list.do";
@@ -34,15 +31,13 @@ public class UserManagementAction {
 	@RequestMapping("/edit.do")
 	public String editUser(Model model, @RequestParam(value = "userId", required = false) Long userId) {
 
-		logger.debug("Accss edit user page!");
-
-		if (userId != null && userId > 0) {
-			User user = userService.getUser(userId);
-			model.addAttribute("user", user);
+		userId = ParamUtil.get(userId, -1);
+		
+		if (userId == null || userId <= 0) {
+			throw new CmsRuntimeException(CmsExceptionConstants.INVALID_PARAMETER, "Parameter userId is invalid!");
 		}
-
+		
 		model.addAttribute("userId", userId);
-
 		return "admin/user/edit_user";
 	}
 

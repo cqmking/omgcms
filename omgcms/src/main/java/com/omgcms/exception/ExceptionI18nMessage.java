@@ -13,5 +13,11 @@ public class ExceptionI18nMessage {
 		RequestContext requestContext = new RequestContext(request);
 		return requestContext.getMessage(key);
 	}
+	
+	public static String getLocaleMessage(String key, Object[] args) {
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+		RequestContext requestContext = new RequestContext(request);
+		return requestContext.getMessage(key, args);
+	}
 
 }

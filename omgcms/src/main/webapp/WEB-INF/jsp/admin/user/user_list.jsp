@@ -83,7 +83,7 @@
 					<td>{{formatDate(user.lastLoginDate)}}</td>
 					<td>{{formatDate(user.createDate)}}</td>
 					<td class="btn-td">
-						<button class="btn btn-sm" type="button"><s:message code="label.common.modify"/> </button>
+						<a class="btn btn-sm" :href="'edit.do?userId='+user.userId"><s:message code="label.common.modify"/></a>
 						<button class="btn btn-sm btn-info" type="button" data-custom="#user-detail" data-toggle="modal" data-size="lg"
 							data-title="<s:message code="label.user.detail"/>" @click="viewUser(user)">
 							<s:message code="label.common.view"/>

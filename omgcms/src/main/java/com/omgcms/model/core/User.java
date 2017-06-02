@@ -1,5 +1,6 @@
 package com.omgcms.model.core;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -20,7 +21,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "user_")
 @Entity
-public class User {
+public class User implements Serializable{
+	
+	private static final long serialVersionUID = 4638652228669149914L;
 	
 	private Long userId;
 
@@ -84,6 +87,7 @@ public class User {
 		this.userName = userName;
 	}
 
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
