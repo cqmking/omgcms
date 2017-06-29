@@ -184,7 +184,8 @@ $(function(){
 					    // 调用本次AJAX请求时传递的options参数
 					    if(XMLHttpRequest.responseJSON){
 					    	var errorMsg = XMLHttpRequest.responseJSON.message;
-					    	$(".section-content").html(errorMsg);
+					    	CMS.Util.showErrorMessage(errorMsg, $(".section-content"));
+					    	//$(".section-content").html(errorMsg);
 					    }
 					    
 				   },

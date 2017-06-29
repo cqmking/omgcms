@@ -16,6 +16,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public class DbAuthorizingRealm extends AuthorizingRealm {
 
 			return info;
 		}
-		
+
 		return null;
 	}
 
@@ -77,14 +78,20 @@ public class DbAuthorizingRealm extends AuthorizingRealm {
 
 		// UsernamePasswordToken对象用来存放提交的登录信息
 		UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-
-		logger.debug("Call doGetAuthenticationInfo method to check is this a valid user:{}", token.getUsername());
 		
+		logger.debug("Call doGetAuthenticationInfo method to check is this a valid user:{}", token.getUsername());
+
 		// 查出是否有此用户
 		User user = userService.getByUserAccount(token.getUsername());
 		if (user != null) {
 			// 若存在，将此用户存放到登录认证info中
-			return new SimpleAuthenticationInfo(user, user.getPassword(), getName());
+			
+			SimpleAuthenticationInfo sai = new SimpleAuthenticationInfo(user, user.getPassword(), getName());
+			sai.setCredentialsSalt(ByteSource.Util.bytes(user.getSalt()));
+			
+			logger.debug("set salt in SimpleAuthenticationInfo and it is:{}",sai.getCredentialsSalt());
+			return sai;
+			
 		}
 		
 		return null;

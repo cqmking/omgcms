@@ -24,7 +24,9 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +61,10 @@ public class CommonTest {
 	public void encryptPassword() {
 		String password = new SimpleHash("md5", "123456", null, 2).toHex();
 		System.out.println(password);
+		String password_cipherText= new Md5Hash("123456",ByteSource.Util.bytes("cmsOmg"),2).toHex(); 
+		System.out.println(password_cipherText);
+		String password2 = new SimpleHash("md5", "123456", ByteSource.Util.bytes("cmsOmg"), 2).toHex();
+		System.out.println(password2);
 	}
 	
 	@Test

@@ -32,7 +32,7 @@ public class User implements Serializable{
 	private String userName;
 
 	private String password;
-
+	
 	private String sex;
 
 	private String email;
@@ -48,6 +48,8 @@ public class User implements Serializable{
 	private String description;
 
 	private String address;
+	
+	private String salt;
 
 	private Date createDate;
 
@@ -160,6 +162,14 @@ public class User implements Serializable{
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 
 	public Date getCreateDate() {

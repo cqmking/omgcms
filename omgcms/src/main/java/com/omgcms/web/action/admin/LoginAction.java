@@ -5,7 +5,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,9 +44,8 @@ public class LoginAction {
 			if (StringUtils.isBlank(account) || StringUtils.isBlank(password)) {
 				throw new CmsRuntimeException(CmsExceptionConstants.LOGIN_ERROR_EMPTY_ACCOUNT_PWD);
 			}
-
-			String md5pwd = new SimpleHash("md5", password, null, 2).toHex();
-			token = new UsernamePasswordToken(account, md5pwd);
+			
+			token = new UsernamePasswordToken(account, password);
 
 			if (rememberme) {
 				token.setRememberMe(true);
