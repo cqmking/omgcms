@@ -1,8 +1,7 @@
 # omgcms
 
-前端：
-\<br>  ZUI 1.6
-  Vue.js
+前端：</br>
+ZUI 1.6, Vue.js</br>
   
-后端：
-  springMVC, Shiro, Spring-Data-JPA
+后端：</br>
+SpringMVC, Shiro, Spring-Data-JPA
