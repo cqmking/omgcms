@@ -1,21 +1,14 @@
-$(function(){
-	
-	window.CMS = {
-		Util: {
-			
-			showErrorMessage: function(msg, $container){
-				
-				var msgCode = '<div class="alert alert-danger"><div class="content">'+msg+'</div></div>'
-				// var msgCode = '<div class="alert">'+msg+'</div>';
-				
-				if($container){
-					$container.html(msgCode);
-				}else{
-					$('body').prepend(msgCode);
-				}
+$(function() {
+
+	var options = {
+		validators : {
+			'confirm-password' : function(value, attrValue, vnode) {
+				// return true to set input as $valid, false to set as $invalid
+				return value === attrValue;
 			}
-			
 		}
 	}
 	
+	Vue.use(VueForm, options);
+
 });

@@ -5,6 +5,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<link href="${basePath}/thirdparty/zui/lib/datetimepicker/datetimepicker.min.css" rel="stylesheet">
+<script src="${basePath}/thirdparty/zui/lib/datetimepicker/datetimepicker.min.js"></script>
+<script src="${basePath}/thirdparty/other/jquery.base64.min.js"></script>
+
 <c:if test="${empty userId}">
 	<title><s:message code="label.user.create" /></title>
 </c:if>
@@ -20,14 +25,19 @@ h3{
 
 label.col-sm-1 {
 	font-weight: normal;
+	min-width: 100px;
+}
+
+input.normal {
+	width: 300px;
 }
 
 .col-sm-11{
 	width: inherit;
 }
 
-input.normal {
-	width: 300px;
+.form-control{
+	display: inline-block;
 }
 
 </style>
@@ -61,77 +71,107 @@ input.normal {
 		</ol>
 	</section>
 	
-	<section class="section-content" v-show="!loading">
-		<form class="form-horizontal">
+	<section class="section-content" v-show="!loading" style="display: none;">
+		<vue-form :state="formstate" class="form-horizontal">
 			<h3><s:message code="label.common.basic.info" /></h3>
-			<div class="form-group">
-				<label class="col-sm-1">账号</label>
+			<validate class="form-group">
+				<label class="col-sm-1"><s:message code="label.user.account" /></label>
 				<div class="col-sm-11">
-					<input type="text" v-model="user.userAccount" class="form-control normal" placeholder="电子邮件/手机号/用户名">
+					<input name="account" type="text" v-model.trim="user.userAccount" class="form-control normal" required minlength="5" maxlength="20" placeholder="<s:message code="label.user.account" />">
+					<field-messages name="account" class="inline-message">
+						<div slot="required" class="alert alert-danger"><s:message code="error.form.field.required" arguments="${cmsUtil.getLocaleMessage('label.user.account')}"/></div>
+						<div slot="minlength" class="alert alert-danger"><s:message code="error.form.filed.length" arguments="${cmsUtil.getLocaleMessage('label.user.account')},5,20"/></div>
+						<div slot="maxlength" class="alert alert-danger"><s:message code="error.form.filed.length" arguments="${cmsUtil.getLocaleMessage('label.user.account')},5,20"/></div>
+					</field-messages>
 				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-1">用户名</label>
+			</validate>
+			<validate class="form-group">
+				<label class="col-sm-1"><s:message code="label.user.username" /></label>
 				<div class="col-sm-11">
-					<input type="text" v-model="user.userName" class="form-control normal" placeholder="用户名">
+					<input name="username" type="text" v-model.trim="user.userName" class="form-control normal" required required minlength="2" maxlength="20" placeholder="<s:message code="label.user.username" />">
+					
+					<field-messages name="username" class="inline-message">
+						<div slot="required" class="alert alert-danger"><s:message code="error.form.field.required" arguments="${cmsUtil.getLocaleMessage('label.user.username')}"/></div>
+						<div slot="minlength" class="alert alert-danger"><s:message code="error.form.filed.length" arguments="${cmsUtil.getLocaleMessage('label.user.username')},2,20"/></div>
+						<div slot="maxlength" class="alert alert-danger"><s:message code="error.form.filed.length" arguments="${cmsUtil.getLocaleMessage('label.user.username')},2,20"/></div>
+					</field-messages>
 				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-1">邮箱</label>
+			</validate>
+			<validate class="form-group">
+				<label class="col-sm-1"><s:message code="label.user.email" /></label>
 				<div class="col-sm-11">
-					<input type="text" v-model="user.email" class="form-control normal" placeholder="密码">
+					<input name="email" v-model.trim="user.email" class="form-control normal" type="email" required placeholder="<s:message code="label.user.email" />">
+					
+					<field-messages name="email" class="inline-message">
+						<div slot="required" class="alert alert-danger"><s:message code="error.form.field.required" arguments="${cmsUtil.getLocaleMessage('label.user.email')}"/></div>
+	       				<div slot="email" class="alert alert-danger"><s:message code="error.form.email.invalid"/></div>
+					</field-messages>
 				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-1">性别</label>
+			</validate>
+			<validate class="form-group">
+				<label class="col-sm-1"><s:message code="label.user.sex" /></label>
 				<div class="col-sm-11">
-					<input type="text" v-model="user.sex" class="form-control normal" placeholder="密码">
+					<input name="sex" type="text" v-model.trim="user.sex" class="form-control normal" placeholder="<s:message code="label.user.sex" />">
 				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-1">年龄</label>
+			</validate>
+			<validate class="form-group">
+				<label class="col-sm-1"><s:message code="label.user.age" /></label>
 				<div class="col-sm-11">
-					<input type="text" v-model="user.age" class="form-control normal" placeholder="密码">
+					<input name="age" type="number" min="1" max="150" v-model.trim="user.age" class="form-control normal" placeholder="<s:message code="label.user.age" />">
+					
+					<field-messages name="age" class="inline-message">
+						<div slot="min" class="alert alert-danger"><s:message code="error.form.filed.number.between" arguments="${cmsUtil.getLocaleMessage('label.user.age')},1,150"/></div>
+						<div slot="max" class="alert alert-danger"><s:message code="error.form.filed.number.between" arguments="${cmsUtil.getLocaleMessage('label.user.age')},1,150"/></div>
+					</field-messages>
 				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-1">生日</label>
+			</validate>
+			<validate class="form-group">
+				<label class="col-sm-1"><s:message code="label.user.birthday" /></label>
 				<div class="col-sm-11">
-					<input type="text" v-model="user.birthday" class="form-control normal" placeholder="密码">
+					<input name="birthday" type="text" v-model.trim="user.birthday" class="form-control form-date birthday" placeholder="<s:message code="label.user.birthday" />">
 				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-1">地址</label>
+			</validate>
+			<validate class="form-group">
+				<label class="col-sm-1"><s:message code="label.common.address" /></label>
 				<div class="col-sm-11">
-					<input type="text" v-model="user.address" class="form-control normal" placeholder="密码">
+					<input name="address" type="text" v-model.trim="user.address" class="form-control normal" maxlength="120" placeholder="<s:message code="label.common.address" />">
 				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-1">备注</label>
+			</validate>
+			<validate class="form-group">
+				<label class="col-sm-1"><s:message code="label.user.description" /></label>
 				<div class="col-sm-11">
-					<input type="text" v-model="user.description" class="form-control normal" placeholder="密码">
+					<input name="description" type="text" v-model="user.description" class="form-control normal" maxlength="500" placeholder="<s:message code="label.user.description" />">
 				</div>
-			</div>
+			</validate>
 			<h3><s:message code="label.common.update.password" /></h3>
-			<div class="form-group">
-				<label class="col-sm-1">新密码</label>
+			<validate class="form-group">
+				<label class="col-sm-1"><s:message code="label.user.new.password" /></label>
 				<div class="col-sm-11">
-					<input type="password" class="form-control normal" placeholder="新密码">
+					<input name="newPassword" type="password" v-model.trim="newPassword1" class="form-control normal" minlength="6" maxlength="18" autocomplete="new-password" placeholder="<s:message code="label.user.new.password" />">
+					
+					<field-messages name="newPassword" class="inline-message">
+						<div slot="minlength" class="alert alert-danger"><s:message code="error.form.filed.length" arguments="${cmsUtil.getLocaleMessage('label.user.new.password')},6,18"/></div>
+						<div slot="maxlength" class="alert alert-danger"><s:message code="error.form.filed.length" arguments="${cmsUtil.getLocaleMessage('label.user.new.password')},6,18"/></div>
+					</field-messages>
 				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-1">确认新密码</label>
+			</validate>
+			<validate class="form-group">
+				<label class="col-sm-1"><s:message code="label.user.confirm.password" /></label>
 				<div class="col-sm-11">
-					<input type="password" class="form-control normal" placeholder="确认新密码">
+					<input name="confirmPassword" type="password" v-model.trim="newPassword2" :confirm-password="newPassword1" maxlength="18" class="form-control normal" placeholder="<s:message code="label.user.confirm.password" />">
+				
+					<field-messages name="confirmPassword" class="inline-message">
+						<div slot="confirm-password" class="alert alert-danger"><s:message code="error.form.filed.different.password"/></div>
+					</field-messages>
 				</div>
-			</div>
-			<div class="form-group">
+			</validate>
+			<validate class="form-group">
 				<div class="col-sm-offset-1 col-sm-11">
-					<button type="button" class="btn btn-primary">保存</button>
-					<button type="button" class="btn btn-default">返回</button>
+					<button type="button" class="btn btn-primary" @click.prevent="saveUser"><s:message code="label.common.save" /></button>
+					<button type="button" class="btn btn-default" @click.prevent="back"><s:message code="label.common.back" /></button>
 				</div>
-			</div>
-		</form>
+			</validate>
+		</vue-form>
 	</section>
 	
 </div>
@@ -146,13 +186,37 @@ $(function(){
 		
 		data: {
 			loading: true,
+			formstate: {},
 			userId:${userId},
-			user:{}
+			user:{},
+			newPassword1:'',
+			newPassword2:''
 		},
 		
-		created: function () {
+		mounted: function(){
+			
 			var self = this;
 			self.initPage();
+			
+			// 选择时间和日期
+			$(".form-date.birthday").datetimepicker(
+			{
+				language:  "zh-CN",
+			    weekStart: 1,
+			    todayBtn:  1,
+			    autoclose: 1,
+			    todayHighlight: 1,
+			    startView: 2,
+			    minView: 2,
+			    //minuteStep: 5,
+			    forceParse: 0,
+			    format: "yyyy-mm-dd"
+			}).on('changeDate', function(ev){
+				var selectDateValue = ev.target.value;
+			    self.user.birthday = selectDateValue;
+			});
+			
+			
 		},
 		
 		methods: {
@@ -166,39 +230,67 @@ $(function(){
 				var self = this;
 				self.loading = true;
 				
-				$.ajax({
-				   type: "GET",
-				   dataType: "json",
-				   url: "${basePath}/api/rest/user/userid/"+self.userId,
-				   success: function(data, status){
-					   if(data=="null"){
-						   
-					   }else{
-						   self.user = data;
-					   }
-					   
-				   },
-				   error: function (XMLHttpRequest, textStatus, errorThrown) {
-					    // 通常 textStatus 和 errorThrown 之中
-					    // 只有一个会包含信息
-					    // 调用本次AJAX请求时传递的options参数
-					    if(XMLHttpRequest.responseJSON){
-					    	var errorMsg = XMLHttpRequest.responseJSON.message;
-					    	CMS.Util.showErrorMessage(errorMsg, $(".section-content"));
-					    	//$(".section-content").html(errorMsg);
-					    }
-					    
-				   },
-				   complete: function (XMLHttpRequest, status) {
-					   self.loading = false;
-				   }
+				CMS.Util.sendJsonRequest({
+					url: "${basePath}/api/rest/user/userid/"+self.userId,
+					method: "GET",
+					params: "",
+					errorMsgContainer: $(".section-content"),
+					success: function(data){
+						self.user = data;
+						$(".form-date.birthday").val(self.user.birthday);
+						$(".form-date.birthday").datetimepicker("update");
+					},
+					complete: function(){
+						self.loading = false;
+					}
 				});
+				
+			},
+			
+			saveUser: function(){
+				var self = this;
+				
+				if(!self.formstate.$valid){
+					return;
+				}
+				
+				var saveUserUrl = "${basePath}/api/rest/user/";
+				if(self.user.userId){
+					saveUserUrl+="update"
+				}else{
+					saveUserUrl+="create"
+				}
+				
+				if(self.newPassword1==self.newPassword2 && $.trim(self.newPassword1).length > 0){
+					saveUserUrl = saveUserUrl + "?password=" + $.base64.encode(self.newPassword1);
+				}
+				
+				CMS.Util.sendJsonRequest({
+					url: saveUserUrl,
+					method: "POST",
+					params: JSON.stringify(self.user),
+					errorMsgContainer: $(".section-content"),
+					success: function(data){
+						self.initPage();
+					},
+					complete: function(){
+						self.newPassword1='';
+						self.newPassword2='';
+						self.loading = false;
+					}
+				});
+			},
+			
+			back: function(){
+				location.href="list.do";
 			}
+			
 		}
 		
 	});
 	
 });
+
 
 </script>
 

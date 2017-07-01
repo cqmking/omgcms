@@ -33,7 +33,7 @@ public class LoginAction {
 			@RequestParam(value = "oc_rememberme", required = false) boolean rememberme) {
 
 		UsernamePasswordToken token = null;
-
+		
 		Subject currentUser = SecurityUtils.getSubject();
 		if (currentUser.isAuthenticated()) {
 			return "redirect:/admin/index.do";

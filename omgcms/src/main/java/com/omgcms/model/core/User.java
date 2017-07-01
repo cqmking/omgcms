@@ -164,6 +164,7 @@ public class User implements Serializable{
 		this.address = address;
 	}
 	
+	@JsonIgnore
 	public String getSalt() {
 		return salt;
 	}

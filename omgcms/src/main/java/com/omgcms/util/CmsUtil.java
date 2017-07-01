@@ -4,20 +4,23 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.crypto.hash.SimpleHash;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.omgcms.bean.SystemInfo;
+import com.omgcms.exception.ExceptionI18nMessage;
 
 public class CmsUtil {
 
 	private static CmsUtil cmsUtil = null;
-	
+
 	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
 	static {
 		OBJECT_MAPPER.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 	}
-	
+
 	private CmsUtil() {
 
 	}
@@ -52,13 +55,12 @@ public class CmsUtil {
 
 	}
 
-	
 	public static String objectToJsonString(Object dataObject) {
 
 		try {
-			
+
 			String jsonData = "";
-			
+
 			if (dataObject instanceof String) {
 				jsonData = String.valueOf(dataObject);
 			} else {
@@ -71,10 +73,25 @@ public class CmsUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return "";
 	}
 
-	
-	
+	public static String getLocaleMessage(String msgKeyCode) {
+		return ExceptionI18nMessage.getLocaleMessage(msgKeyCode);
+	}
+
+	public static String getLocaleMessage(String msgKeyCode, Object[] args) {
+		return ExceptionI18nMessage.getLocaleMessage(msgKeyCode, args);
+	}
+
+	public static String getLocaleMessage(String msgKeyCode, String args) {
+		return ExceptionI18nMessage.getLocaleMessage(msgKeyCode, args.split(StringPool.COMMA, -1));
+	}
+
+	public static String md5encodePassword(String password, String salt) {
+		String md5password = new SimpleHash("md5", password, salt, 2).toHex();
+		return md5password;
+	}
+
 }

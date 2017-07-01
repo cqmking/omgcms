@@ -55,9 +55,9 @@ public class CmsExceptionHandler extends SimpleMappingExceptionResolver {
 
 						if (!StringUtils.isBlank(exceptionKey)) {
 							if (args != null) {
-								errorMessage = ExceptionI18nMessage.getLocaleMessage(exceptionKey, args);
+								errorMessage = CmsUtil.getLocaleMessage(exceptionKey, args);
 							} else {
-								errorMessage = ExceptionI18nMessage.getLocaleMessage(exceptionKey);
+								errorMessage = CmsUtil.getLocaleMessage(exceptionKey);
 							}
 						} else {
 							errorMessage = ex.getMessage();

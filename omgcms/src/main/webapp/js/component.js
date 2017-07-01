@@ -103,9 +103,67 @@
         }
     });
     
+    
 
 }(jQuery));
 
-
+(function($) {
+    'use strict';
+    
+    window.CMS = {
+		Util: {
+			
+			showErrorMessage: function(msg, $container){
+				
+				var msgCode = '<div class="alert alert-danger"><div class="content">'+msg+'</div></div>'
+				// var msgCode = '<div class="alert">'+msg+'</div>';
+				
+				if($container){
+					$container.html(msgCode);
+				}else{
+					$('body').prepend(msgCode);
+				}
+			},
+			
+			formatDate: function(dateTimeStamp, formatString){
+				var mDate = moment(dateTimeStamp);
+				var _formatString = formatString || 'YYYY-MM-DD HH:mm:ss';
+			    return mDate.format(_formatString);
+			},
+			
+			sendJsonRequest: function(options){
+				
+				var instance = this;
+				
+				$.ajax({
+				   type: options.method,
+				   dataType: "json",
+				   contentType: "application/json",
+				   url: options.url,
+				   data: options.params,
+				   success: function(data, status){
+					   options.success(data, status);
+				   },
+				   error: function (XMLHttpRequest, textStatus, errorThrown) {
+					    // 通常 textStatus 和 errorThrown 之中
+					    // 只有一个会包含信息
+					    // 调用本次AJAX请求时传递的options参数
+					    if(XMLHttpRequest.responseJSON){
+					    	var errorMsg = XMLHttpRequest.responseJSON.message;
+					    	instance.showErrorMessage(errorMsg, options.errorMsgContainer);
+					    }
+					    
+				   },
+				   complete: function (XMLHttpRequest, status) {
+					   options.complete(XMLHttpRequest, status);
+				   }
+				});
+				
+			}
+			
+		}
+	}
+    
+}(jQuery));
 
 

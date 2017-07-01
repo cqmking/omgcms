@@ -1,21 +1,26 @@
 package com.omgcms.web.action.api;
 
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.codec.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.omgcms.exception.CmsExceptionConstants;
-import com.omgcms.exception.CmsRuntimeException;
-import com.omgcms.exception.ExceptionI18nMessage;
 import com.omgcms.model.core.User;
 import com.omgcms.service.UserService;
 import com.omgcms.util.CmsConstants;
+import com.omgcms.util.CmsUtil;
 import com.omgcms.web.action.admin.HomeIndexAction;
 import com.omgcms.web.util.ParamUtil;
 
@@ -56,19 +61,41 @@ public class UserAction {
 		userId = ParamUtil.get(userId, -1);
 
 		User user = null;
-
+		
 		if (userId != null && userId > 0) {
 			user = userService.getUser(userId);
 		}
-
-		if (user == null) {
-			String arg = ExceptionI18nMessage.getLocaleMessage("label.user");
-			throw new CmsRuntimeException(CmsExceptionConstants.ERROR_OBJECT_NOT_EXIST, new String[] { arg },
-					"User not exsit for userId " + userId);
-		}
-
+		
 		return user;
 
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public User createUser(@RequestBody User user) {
+		return null;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public User updateUser(@RequestBody User user, @RequestParam(required=false) String password) throws UnsupportedEncodingException {
+		
+		if (!StringUtils.isBlank(password)) {
+			String realPassword = Base64.decodeToString(password);
+			String newSalt = String.valueOf(new Date().getTime());
+			String md5password = CmsUtil.md5encodePassword(realPassword, newSalt);
+			user.setPassword(md5password);
+			user.setSalt(newSalt);
+			
+		}else{
+			User dbUser = userService.getUser(user.getUserId());
+			user.setPassword(dbUser.getPassword());
+			user.setSalt(dbUser.getSalt());
+		}
+		
+		User savedUser = userService.saveAndFlush(user);
+		
+		return savedUser;
 	}
 
 }

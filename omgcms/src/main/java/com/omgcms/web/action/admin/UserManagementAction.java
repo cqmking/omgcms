@@ -7,8 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.omgcms.exception.CmsExceptionConstants;
-import com.omgcms.exception.CmsRuntimeException;
 import com.omgcms.web.util.ParamUtil;
 
 @Controller
@@ -24,7 +22,7 @@ public class UserManagementAction {
 
 	@RequestMapping("/list.do")
 	public String userList(Model model) {
-
+		logger.debug("View user list!");
 		return "admin/user/user_list";
 	}
 
@@ -32,10 +30,6 @@ public class UserManagementAction {
 	public String editUser(Model model, @RequestParam(value = "userId", required = false) Long userId) {
 
 		userId = ParamUtil.get(userId, -1);
-		
-		if (userId == null || userId <= 0) {
-			throw new CmsRuntimeException(CmsExceptionConstants.INVALID_PARAMETER, "Parameter userId is invalid!");
-		}
 		
 		model.addAttribute("userId", userId);
 		return "admin/user/edit_user";

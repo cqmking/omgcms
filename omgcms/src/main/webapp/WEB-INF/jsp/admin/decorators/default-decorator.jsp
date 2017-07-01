@@ -10,6 +10,8 @@
 <script src="${basePath}/thirdparty/zui/js/zui.js"></script>
 
 <script src="${basePath}/thirdparty/vue/vue.js"></script>
+<script src="${basePath}/thirdparty/vue-form/vue-form.min.js"></script>
+
 <script src="${basePath}/thirdparty/moment/moment.min.js"></script>
 
 <script src="${basePath}/js/component.js"></script>
