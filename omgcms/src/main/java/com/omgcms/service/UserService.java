@@ -7,9 +7,11 @@ import com.omgcms.model.core.User;
 public interface UserService {
 
 	User saveAndFlush(User user);
-
+	
 	User getByUserAccount(String userAccount);
 
+	User getByEmail(String email);
+	
 	User getUser(long userId);
 
 	Page<User> findUsers(int pageNo, int pageSize, String orderByProperty, String sortType);

@@ -16,4 +16,8 @@ public class CmsExceptionConstants {
 	
 	public static final String ERROR_OBJECT_NOT_EXIST = "error.object.not.exsit";
 	
+	public static final String ERROR_USERACCOUNT_ALREADY_EXIST = "error.user.account.already.exsit";
+	
+	public static final String ERROR_USEREMAIL_ALREADY_EXIST = "error.user.email.already.exsit";
+	
 }

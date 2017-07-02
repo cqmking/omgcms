@@ -77,11 +77,11 @@ input.normal {
 			<validate class="form-group">
 				<label class="col-sm-1"><s:message code="label.user.account" /></label>
 				<div class="col-sm-11">
-					<input name="account" type="text" v-model.trim="user.userAccount" class="form-control normal" required minlength="5" maxlength="20" placeholder="<s:message code="label.user.account" />">
+					<input name="account" type="text" v-model.trim="user.userAccount" class="form-control normal" required minlength="2" maxlength="20" placeholder="<s:message code="label.user.account" />">
 					<field-messages name="account" class="inline-message">
 						<div slot="required" class="alert alert-danger"><s:message code="error.form.field.required" arguments="${cmsUtil.getLocaleMessage('label.user.account')}"/></div>
-						<div slot="minlength" class="alert alert-danger"><s:message code="error.form.filed.length" arguments="${cmsUtil.getLocaleMessage('label.user.account')},5,20"/></div>
-						<div slot="maxlength" class="alert alert-danger"><s:message code="error.form.filed.length" arguments="${cmsUtil.getLocaleMessage('label.user.account')},5,20"/></div>
+						<div slot="minlength" class="alert alert-danger"><s:message code="error.form.filed.length" arguments="${cmsUtil.getLocaleMessage('label.user.account')},2,20"/></div>
+						<div slot="maxlength" class="alert alert-danger"><s:message code="error.form.filed.length" arguments="${cmsUtil.getLocaleMessage('label.user.account')},2,20"/></div>
 					</field-messages>
 				</div>
 			</validate>
@@ -187,7 +187,7 @@ $(function(){
 		data: {
 			loading: true,
 			formstate: {},
-			userId:${userId},
+			userId:'${userId}',
 			user:{},
 			newPassword1:'',
 			newPassword2:''
@@ -228,6 +228,11 @@ $(function(){
 			
 			getRemotePageData: function(){
 				var self = this;
+				if(self.userId==null || $.trim(self.userId).length==0){
+					self.loading = false;
+					return;
+				}
+				
 				self.loading = true;
 				
 				CMS.Util.sendJsonRequest({
@@ -270,6 +275,7 @@ $(function(){
 					method: "POST",
 					params: JSON.stringify(self.user),
 					errorMsgContainer: $(".section-content"),
+					prependError: true,
 					success: function(data){
 						self.initPage();
 					},

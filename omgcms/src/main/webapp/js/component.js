@@ -107,20 +107,88 @@
 
 }(jQuery));
 
+/**
+ * 扩展JQuery，添加自定义datatable
+ * 
+ */
+(function ($) {
+	
+	var CustomDatatable = function($target){
+		var that     = this;
+		that.$target = $target;
+	};
+	
+	CustomDatatable.prototype.getSelectRows = function() {
+		var that     = this;
+		return that.$target.find("td.check-btn.checked");
+    };
+    
+    CustomDatatable.prototype.getSelectIds = function() {
+		var that     = this;
+		return that.getSelectRows().data("id");
+    };
+	
+    $.fn.extend({
+    	
+        "customDatatable": function () {
+        	
+        	var $table = this;
+        	$table.find("th.check-all").off().on("click", function(){
+        		
+        		if($(this).hasClass("checked")){
+        			$(this).removeClass("checked");
+        			$(this).closest("table.datatable").find("th.check-btn, td.check-btn").removeClass("checked");
+        		}else{
+        			$(this).addClass("checked");
+        			$(this).closest("table.datatable").find("th.check-btn, td.check-btn").removeClass("checked").addClass("checked");
+        		}
+        		
+        	});
+        	
+        	$table.find("td.check-btn").off().on("click", function(){
+        		if($(this).hasClass("checked")){
+        			$(this).removeClass("checked");
+        			$table.find("th.check-all.checked").removeClass("checked");
+        		}else{
+        			$(this).addClass("checked");
+        			var notCheckedSize = $table.find("td.check-btn").not(".checked").size();
+        			if(notCheckedSize==0){
+        				$table.find("th.check-all").addClass("checked");
+        			}
+        		}
+        	});
+        	
+        	return new CustomDatatable($table);
+        }
+    
+    });
+})(jQuery);
+
+
+
 (function($) {
     'use strict';
     
     window.CMS = {
 		Util: {
 			
-			showErrorMessage: function(msg, $container){
+			showErrorMessage: function(msg, $container, prepend){
 				
-				var msgCode = '<div class="alert alert-danger"><div class="content">'+msg+'</div></div>'
+				var msgCode = '<div class="alert alert-danger custom-error-msg"><div class="content">'+msg+'</div></div>'
 				// var msgCode = '<div class="alert">'+msg+'</div>';
 				
 				if($container){
-					$container.html(msgCode);
+					
+					$container.find("div.alert.custom-error-msg").remove();
+					
+					if(prepend==true){
+						$container.prepend(msgCode);
+					}else{
+						$container.html(msgCode);
+					}
+					
 				}else{
+					$('body').find("div.alert.custom-error-msg").remove();
 					$('body').prepend(msgCode);
 				}
 			},
@@ -144,16 +212,22 @@
 				   success: function(data, status){
 					   options.success(data, status);
 				   },
-				   error: function (XMLHttpRequest, textStatus, errorThrown) {
-					    // 通常 textStatus 和 errorThrown 之中
-					    // 只有一个会包含信息
-					    // 调用本次AJAX请求时传递的options参数
-					    if(XMLHttpRequest.responseJSON){
-					    	var errorMsg = XMLHttpRequest.responseJSON.message;
-					    	instance.showErrorMessage(errorMsg, options.errorMsgContainer);
-					    }
-					    
-				   },
+				   error : function(XMLHttpRequest, textStatus, errorThrown) {
+						
+						// 通常 textStatus 和 errorThrown 之中
+						// 只有一个会包含信息
+						// 调用本次AJAX请求时传递的options参数
+						if (XMLHttpRequest.responseJSON) {
+							var errorMsg = XMLHttpRequest.responseJSON.message;
+							if(options.prependError==true){
+								instance.showErrorMessage(errorMsg, options.errorMsgContainer, options.prependError);
+							}else{
+								instance.showErrorMessage(errorMsg, options.errorMsgContainer);
+							}
+							
+						}
+
+					},
 				   complete: function (XMLHttpRequest, status) {
 					   options.complete(XMLHttpRequest, status);
 				   }

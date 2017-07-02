@@ -251,9 +251,27 @@ table td.td-label{
     text-align: right;
     width: 150px;
 }
+table.datatable th.check-all{
+	min-height: 36px; 
+	height: 36px; 
+	width: 36px;
+}
 
-table td.td-value{
-	
+table.datatable > tbody > tr > td.check-btn,
+table.datatable > thead > tr > th.check-btn{
+    color: #9b9b9b;
+    text-align: center;
+    cursor: pointer;
+}
+
+table.datatable > tbody > tr > td.check-btn.checked,
+table.datatable > thead > tr > th.check-btn.checked{
+	color: #333333;
+}
+
+table.datatable > thead > tr > th.check-btn.checked > .icon-check-empty:before, 
+table.datatable > tbody > tr > td.check-btn.checked > .icon-check-empty:before{
+    content: '\e642';
 }
 
 .inline-message{

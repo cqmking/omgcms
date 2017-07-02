@@ -28,10 +28,16 @@ public class UserManagementAction {
 
 	@RequestMapping("/edit.do")
 	public String editUser(Model model, @RequestParam(value = "userId", required = false) Long userId) {
-
+		
 		userId = ParamUtil.get(userId, -1);
 		
 		model.addAttribute("userId", userId);
+		return "admin/user/edit_user";
+	}
+	
+	@RequestMapping("/add.do")
+	public String addUser(Model model) {
+		
 		return "admin/user/edit_user";
 	}
 

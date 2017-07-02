@@ -1,5 +1,8 @@
 $(function() {
+	loadCustomVueFormValidator();
+});
 
+function loadCustomVueFormValidator() {
 	var options = {
 		validators : {
 			'confirm-password' : function(value, attrValue, vnode) {
@@ -10,5 +13,13 @@ $(function() {
 	}
 	
 	Vue.use(VueForm, options);
+}
 
-});
+
+
+
+
+
+
+
+

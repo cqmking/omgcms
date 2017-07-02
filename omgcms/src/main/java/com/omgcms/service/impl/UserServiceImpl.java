@@ -25,6 +25,22 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User saveAndFlush(User user) {
+		
+		if(user.getUserId()==null||user.getUserId()<0){
+			// 新增
+			User exsitAccountUser = getByUserAccount(user.getUserAccount());
+			if(exsitAccountUser!=null){
+				throw new CmsRuntimeException(CmsExceptionConstants.ERROR_USERACCOUNT_ALREADY_EXIST,
+						"User already exsit for userAccount " + user.getUserAccount());
+			}
+			
+			User exsitEmailUser = getByEmail(user.getEmail());
+			if(exsitEmailUser!=null){
+				throw new CmsRuntimeException(CmsExceptionConstants.ERROR_USEREMAIL_ALREADY_EXIST,
+						"User already exsit for user email " + user.getEmail());
+			}
+		}
+		
 		return userRepository.saveAndFlush(user);
 	}
 
@@ -33,6 +49,11 @@ public class UserServiceImpl implements UserService {
 		return userRepository.getByUserAccount(userAccount);
 	}
 
+	@Override
+	public User getByEmail(String email) {
+		return userRepository.getByEmail(email);
+	}
+	
 	@Override
 	public User getUser(long userId){
 		

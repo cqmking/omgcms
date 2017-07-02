@@ -10,6 +10,13 @@ public interface UserRepository extends JpaSpecificationExecutor<User>, JpaRepos
 	// 根据 userAccount 来获取对应的 User
 	public User getByUserAccount(String userAccount);
 	
+	/**
+	 * Get user by user email
+	 * @param email Email address
+	 * @return User obejct
+	 */
+	public User getByEmail(String email);
+	
 	// 根据 userId 获取用户信息
 	public User getByUserId(long userId);
 	

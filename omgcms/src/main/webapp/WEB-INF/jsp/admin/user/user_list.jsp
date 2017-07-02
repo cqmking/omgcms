@@ -4,6 +4,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title><s:message code="label.user.management" /></title>
 </head>
@@ -27,38 +28,25 @@
 
 	<section class="section-content" v-show="!loading" style="display: none;">
 			
-			<ul class="nav nav-primary">
-				<li class="active">
-					<a href="your/nice/url">首页</a>
-				</li>
-				<li>
-					<a href="your/nice/url">动态 <span class="label label-badge label-success">4</span></a>
-				</li>
-				<li>
-					<a href="your/nice/url">项目 </a>
-				</li>
-				<li>
-					<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><s:message code="label.common.operation" /> <span class="caret"></span></a>
-					<ul class="dropdown-menu">
-						<li>
-							<a href="your/nice/url">任务</a>
-						</li>
-						<li>
-							<a href="your/nice/url">bug</a>
-						</li>
-						<li>
-							<a href="your/nice/url">需求</a>
-						</li>
-						<li>
-							<a href="your/nice/url">用例</a>
-						</li>
-					</ul>
-				</li>
-			</ul>
+		<ul class="nav nav-primary">
 			
-			<table class="table table-bordered table-hover">
+			<li>
+				<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:;"><s:message code="label.common.operation" /> <span class="caret"></span></a>
+				<ul class="dropdown-menu">
+					<li>
+						<a href="add.do"><s:message code="label.common.add" /></a>
+					</li>
+					<li>
+						<a href="javascript:;"><s:message code="label.common.delete" /></a>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		
+		<table class="table table-bordered datatable table-hover">
 			<thead>
 				<tr>
+					<th data-index="check" class="check-all check-btn"><i class="icon-check-empty"></i></th>
 					<th><s:message code="label.user.userid" /></th>
 					<th><s:message code="label.user.account" /></th>
 					<th><s:message code="label.user.username" /></th>
@@ -73,6 +61,7 @@
 			</thead>
 			<tbody>
 				<tr v-for="(user, index) in pageInfo.content">
+					<td data-index="check" class="check-row check-btn"><i class="icon-check-empty"></i></td>
 					<td>{{user.userId}}</td>
 					<td>{{user.userAccount}}</td>
 					<td>{{user.userName}}</td>
@@ -141,7 +130,7 @@
 				</tbody>
 			</table>
 			<div class="cust-modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><s:message code="label.common.close" /></button>
 			</div>
 		</div>
 	</div>
@@ -175,6 +164,10 @@ $(function(){
 			self.initPage();
 		},
 		
+		updated: function(){
+			$("table.datatable").customDatatable();
+		},
+		
 		methods: {
 			
 			initPage: function(){
@@ -195,7 +188,6 @@ $(function(){
 				   dataType: "json",
 				   url: "${basePath}/api/rest/user/list/page-"+(self.pageInfo.number+1)+"/page-size-"+self.pageSize,
 				   success: function(data, status){
-					   console.debug("OK");
 					   self.pageInfo = data;
 				   },
 				   complete: function (XMLHttpRequest, status) {
@@ -206,9 +198,8 @@ $(function(){
 			},
 			
 			formatDate: function(dateTimeStamp, formatString){
-				var mDate = moment(dateTimeStamp);
-				var _formatString = formatString || 'YYYY-MM-DD HH:mm:ss';
-			    return mDate.format(_formatString);
+				var formatDate = CMS.Util.formatDate(dateTimeStamp, formatString);
+			    return formatDate;
 			}
 		}
 		
