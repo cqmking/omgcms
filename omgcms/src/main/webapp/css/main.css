@@ -64,6 +64,12 @@ h1, h2, h3, h4, h5, h6 {
 	height: 38px;
 }
 
+.messagers-holder.bottom .messager, 
+.messagers-holder.center .messager, 
+.messagers-holder.top .messager {
+    margin: 50px auto;
+}
+
 /***Main Css***/
 html, body{
 	margin: 0;

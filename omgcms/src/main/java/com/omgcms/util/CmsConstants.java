@@ -17,5 +17,4 @@ public class CmsConstants {
 	public static final String MSG_STATUS_SUCCESS = "success";
 	
 	
-	
 }

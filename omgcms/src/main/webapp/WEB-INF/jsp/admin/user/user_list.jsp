@@ -65,11 +65,11 @@
 					<td>{{user.userId}}</td>
 					<td>{{user.userAccount}}</td>
 					<td>{{user.userName}}</td>
-					<td>{{user.sex}}</td>
+					<td>{{getSexText(user.sex)}}</td>
 					<td>{{user.age}}</td>
 					<td>{{user.email}}</td>
 					<td>{{formatDate(user.birthday,"YYYY-MM-DD")}}</td>
-					<td>{{formatDate(user.lastLoginDate)}}</td>
+					<td>{{getLoginDateTime(user.lastLoginDate)}}</td>
 					<td>{{formatDate(user.createDate)}}</td>
 					<td class="btn-td">
 						<a class="btn btn-sm" :href="'edit.do?userId='+user.userId"><s:message code="label.common.modify"/></a>
@@ -101,7 +101,7 @@
 						<td class="td-label"><s:message code="label.user.username" /></td>
 						<td class="td-value">{{currentUser.userName}}</td>
 						<td class="td-label"><s:message code="label.user.sex" /></td>
-						<td class="td-value">{{currentUser.sex}}</td>
+						<td class="td-value">{{getSexText(currentUser.sex)}}</td>
 					</tr>
 					<tr>
 						<td class="td-label"><s:message code="label.user.age" /></td>
@@ -117,7 +117,7 @@
 					</tr>
 					<tr>
 						<td class="td-label"><s:message code="label.user.lastLoginDate" /></td>
-						<td class="td-value" colspan="3">{{formatDate(currentUser.lastLoginDate)}}</td>
+						<td class="td-value" colspan="3">{{getLoginDateTime(currentUser.lastLoginDate)}}</td>
 					</tr>
 					<tr>
 						<td class="td-label"><s:message code="label.common.address" /></td>
@@ -198,9 +198,31 @@ $(function(){
 			},
 			
 			formatDate: function(dateTimeStamp, formatString){
+				if(dateTimeStamp==null){
+					return '';
+				}
 				var formatDate = CMS.Util.formatDate(dateTimeStamp, formatString);
 			    return formatDate;
+			},
+			
+			getLoginDateTime: function(dateTimeStamp, formatString){
+				var self = this;
+				if(dateTimeStamp==null){
+					return '<s:message code="label.user.never.login" />';
+				}
+				return self.formatDate(dateTimeStamp, formatString);
+			},
+			
+			getSexText: function(key){
+				var sexText = {
+						'-1': '<s:message code="label.user.sex.unknown" />',
+						'1': '<s:message code="label.user.sex.male" />',
+						'0': '<s:message code="label.user.sex.female" />',
+				}
+				return sexText[key];
 			}
+			
+			
 		}
 		
 	});

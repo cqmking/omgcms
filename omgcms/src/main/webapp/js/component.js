@@ -172,6 +172,13 @@
     window.CMS = {
 		Util: {
 			
+			showNoticeMessage: function(type, message){
+				new $.zui.Messager(message, {
+				    type: type, // 定义颜色主题
+				    time: 0
+				}).show();
+			},
+			
 			showErrorMessage: function(msg, $container, prepend){
 				
 				var msgCode = '<div class="alert alert-danger custom-error-msg"><div class="content">'+msg+'</div></div>'
@@ -194,6 +201,9 @@
 			},
 			
 			formatDate: function(dateTimeStamp, formatString){
+				if(dateTimeStamp==null){
+					return '';
+				}
 				var mDate = moment(dateTimeStamp);
 				var _formatString = formatString || 'YYYY-MM-DD HH:mm:ss';
 			    return mDate.format(_formatString);

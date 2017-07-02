@@ -3,6 +3,7 @@ package com.omgcms.web.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -35,7 +36,21 @@ public class LoadVariableInterceptor implements HandlerInterceptor {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-
+		String messageCode = request.getParameter("messageCode");
+		String noteType = request.getParameter("noteType");
+		
+		if(!StringUtils.isBlank(messageCode)){
+			String noteMessgae = CmsUtil.getLocaleMessage(messageCode);
+			request.setAttribute("noteMessgae", noteMessgae);
+			logger.debug("afterCompletion message {}", noteMessgae);
+		}
+		
+		if(!StringUtils.isBlank(noteType)){
+			request.setAttribute("noteType", noteType);
+		}else{
+			request.setAttribute("noteType", "info");
+		}
+		
 	}
 
 	private String getBasePath(HttpServletRequest request) {

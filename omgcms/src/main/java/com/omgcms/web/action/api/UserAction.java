@@ -1,6 +1,7 @@
 package com.omgcms.web.action.api;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.codec.Base64;
@@ -17,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.omgcms.admin.util.Config;
-import com.omgcms.exception.CmsExceptionConstants;
-import com.omgcms.exception.CmsRuntimeException;
 import com.omgcms.model.core.User;
 import com.omgcms.service.UserService;
 import com.omgcms.util.CmsConstants;
@@ -85,9 +84,16 @@ public class UserAction {
 			user.setSalt(newSalt);
 
 		} else {
-			user.setPassword(Config.get("admin.user.defaultPassword"));
+			String defaultPassword = Config.get("admin.user.defaultPassword");
+			String md5password = CmsUtil.md5encodePassword(defaultPassword, newSalt);
+			user.setPassword(md5password);
 			user.setSalt(newSalt);
 		}
+		
+		if(user.getBirthday()==null){
+			user.setBirthday(new GregorianCalendar(1970, 0, 1).getTime());
+		}
+		user.setCreateDate(new Date());
 		
 		User savedUser = userService.saveAndFlush(user);
 		

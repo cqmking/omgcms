@@ -111,7 +111,11 @@ input.normal {
 			<validate class="form-group">
 				<label class="col-sm-1"><s:message code="label.user.sex" /></label>
 				<div class="col-sm-11">
-					<input name="sex" type="text" v-model.trim="user.sex" class="form-control normal" placeholder="<s:message code="label.user.sex" />">
+					<select name="sex" v-model.trim="user.sex" class="form-control normal" placeholder="<s:message code="label.user.sex" />">
+						<option value="-1"><s:message code="label.user.sex.unknown" /></option>
+						<option value="1"><s:message code="label.user.sex.male" /></option>
+						<option value="0"><s:message code="label.user.sex.female" /></option>
+					</select>
 				</div>
 			</validate>
 			<validate class="form-group">
@@ -187,8 +191,8 @@ $(function(){
 		data: {
 			loading: true,
 			formstate: {},
-			userId:'${userId}',
-			user:{},
+			userId: '${userId}',
+			user: {},
 			newPassword1:'',
 			newPassword2:''
 		},
@@ -216,13 +220,15 @@ $(function(){
 			    self.user.birthday = selectDateValue;
 			});
 			
-			
 		},
 		
 		methods: {
 			
 			initPage: function(){
 				var self = this;
+				if(self.user.sex==null||$.trim(self.user.sex).length==0){
+					self.user.sex="-1";	// default value
+				}
 				self.getRemotePageData();
 			},
 			
@@ -277,7 +283,12 @@ $(function(){
 					errorMsgContainer: $(".section-content"),
 					prependError: true,
 					success: function(data){
-						self.initPage();
+						if(self.user.userId){
+							location.href="list.do?messageCode=message.update.success&noteType=success";
+						}else{
+							location.href="list.do?messageCode=message.create.success&noteType=success";
+						}
+						// self.initPage();
 					},
 					complete: function(){
 						self.newPassword1='';

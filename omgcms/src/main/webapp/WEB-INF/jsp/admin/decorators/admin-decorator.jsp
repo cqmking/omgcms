@@ -48,5 +48,21 @@ html, body {
 	
 </body>
 
+<script type="text/javascript">
+$(function(){
+	
+	var noteMessgae = "${noteMessgae}";
+	var type = "${noteType}";
+	
+	if($.trim(noteMessgae).length>0){
+		if($.trim(type).length==0){
+			type = "info";
+		}
+		
+		CMS.Util.showNoticeMessage(type, noteMessgae);
+	}
+	
+});
+</script>
 
 </html>
