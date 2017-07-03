@@ -74,10 +74,10 @@
 					<td class="btn-td">
 						<a class="btn btn-sm" :href="'edit.do?userId='+user.userId"><s:message code="label.common.modify"/></a>
 						<button class="btn btn-sm btn-info" type="button" data-custom="#user-detail" data-toggle="modal" data-size="lg"
-							data-title="<s:message code="label.user.detail"/>" @click="viewUser(user)">
+							data-title="<s:message code="label.user.detail"/>" @click.prevent="viewUser(user)">
 							<s:message code="label.common.view"/>
 						</button>
-						<button class="btn btn-sm btn-danger" type="button"><s:message code="label.common.delete"/></button>
+						<button class="btn btn-sm btn-danger" type="button" @click.prevent="deleteUser(user)"><s:message code="label.common.delete"/></button>
 					</td>
 				</tr>
 			</tbody>
@@ -183,18 +183,22 @@ $(function(){
 				var self = this;
 				self.loading = true;
 				
-				$.ajax({
-				   type: "GET",
-				   dataType: "json",
-				   url: "${basePath}/api/rest/user/list/page-"+(self.pageInfo.number+1)+"/page-size-"+self.pageSize,
-				   success: function(data, status){
-					   self.pageInfo = data;
-				   },
-				   complete: function (XMLHttpRequest, status) {
-					   self.loading = false;
-					   self.pageLoading = false;
-				   }
+				var getUserListUrl = "${basePath}/api/rest/user/list/page-"+(self.pageInfo.number+1)+"/page-size-"+self.pageSize;
+
+				CMS.Util.sendJsonRequest({
+					url: getUserListUrl,
+					method: "GET",
+					errorMsgContainer: $(".section-content"),
+					prependError: false,
+					success: function(data){
+						self.pageInfo = data;
+					},
+					complete: function(){
+						self.loading = false;
+						self.pageLoading = false;
+					}
 				});
+				
 			},
 			
 			formatDate: function(dateTimeStamp, formatString){
@@ -220,6 +224,25 @@ $(function(){
 						'0': '<s:message code="label.user.sex.female" />',
 				}
 				return sexText[key];
+			},
+			
+			deleteUser: function(user){
+				
+				var deleteUserUrl = "${basePath}/api/rest/user/delete/"+user.userId;
+				
+				CMS.Util.sendJsonRequest({
+					url: deleteUserUrl,
+					method: "DELETE",
+					errorMsgContainer: $(".section-content"),
+					prependError: true,
+					success: function(data){
+						location.href="list.do?messageCode=message.delete.success&noteType=success";
+					},
+					complete: function(){
+						self.loading = false;
+					}
+				});
+				
 			}
 			
 			

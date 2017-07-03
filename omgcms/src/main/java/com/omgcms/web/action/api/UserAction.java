@@ -66,9 +66,20 @@ public class UserAction {
 		if (userId != null) {
 			user = userService.getUser(userId);
 		}
-		
+
 		return user;
 
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/delete/{userId}", method = RequestMethod.DELETE)
+	public boolean deleteUser(@PathVariable(value = "userId") Integer userId) {
+		
+		userId = ParamUtil.get(userId, -1);
+		
+		userService.deleteUser(userId);
+		
+		return true;
 	}
 
 	@ResponseBody
@@ -89,14 +100,14 @@ public class UserAction {
 			user.setPassword(md5password);
 			user.setSalt(newSalt);
 		}
-		
-		if(user.getBirthday()==null){
+
+		if (user.getBirthday() == null) {
 			user.setBirthday(new GregorianCalendar(1970, 0, 1).getTime());
 		}
 		user.setCreateDate(new Date());
-		
+
 		User savedUser = userService.saveAndFlush(user);
-		
+
 		return savedUser;
 	}
 

@@ -174,8 +174,8 @@
 			
 			showNoticeMessage: function(type, message){
 				new $.zui.Messager(message, {
-				    type: type, // 定义颜色主题
-				    time: 0
+				    type: type // 定义颜色主题
+				    //,time: 0
 				}).show();
 			},
 			

@@ -12,6 +12,8 @@ public interface UserService {
 
 	User getByEmail(String email);
 	
+	void deleteUser(long userId);
+	
 	User getUser(long userId);
 
 	Page<User> findUsers(int pageNo, int pageSize, String orderByProperty, String sortType);
