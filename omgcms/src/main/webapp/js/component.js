@@ -165,7 +165,10 @@
 })(jQuery);
 
 
-
+/**
+ * CMS.Util tool
+ * @param $
+ */
 (function($) {
     'use strict';
     
@@ -245,9 +248,65 @@
 				
 			}
 			
+		},
+		
+		Dialog: {
+			trigger: '',
+			
+			show: function(options){
+				var instance = this;
+				var footerHtmlCode = '<div class="dialog-modal-footer"></div>';
+				var buttonHtmlCode = '<button type="button" class="btn btn-default">关闭</button>';
+				
+				//在$.zui对象上已默认绑定了一个对话框触发器对象，可以直接使用方法并传递不同的参数来随时启动对话框。
+				var newTrigger = new $.zui.ModalTrigger();
+				instance.trigger = newTrigger;
+				
+				var $footer = $(footerHtmlCode);
+				
+				if(options.toolbar){
+					$.each(options.toolbar, function(i, button){
+						var $newBtn = $(buttonHtmlCode);
+						if(button.label){
+							$newBtn.text(button.label);
+						}
+						if(button.callback){
+							$newBtn.off().on("click", function(){
+								button.callback();
+							});
+						}
+						if(button.cssClass){
+							$newBtn.removeClass("btn-default");
+							$newBtn.addClass(button.cssClass);
+						}
+						
+						$footer.append($newBtn);
+						
+					});
+				}
+				
+				if($footer.find("button").size() > 0){
+					options.onShow = function(){
+						$(newTrigger.$modal).find(".modal-body").append($footer);
+					};
+					
+				}
+				
+				newTrigger.show(options);
+				return instance;
+				
+			},
+			
+			close: function(){
+				var instance = this;
+				instance.trigger.close();
+			}
 		}
-	}
+    }
     
 }(jQuery));
+
+
+
 
 

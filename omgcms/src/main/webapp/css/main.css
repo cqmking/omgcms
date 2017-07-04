@@ -243,8 +243,17 @@ h2{
 	padding: 10px 15px;
 }
 
+.dialog-modal-footer,
 .cust-modal-footer{
 	text-align: right;	
+}
+
+.dialog-modal-footer{
+	margin-top: 15px;
+}
+
+.dialog-modal-footer .btn{
+	margin-left: 8px;
 }
 
 .hide{

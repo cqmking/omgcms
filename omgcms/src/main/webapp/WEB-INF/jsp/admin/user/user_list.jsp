@@ -228,20 +228,43 @@ $(function(){
 			
 			deleteUser: function(user){
 				
-				var deleteUserUrl = "${basePath}/api/rest/user/delete/"+user.userId;
-				
-				CMS.Util.sendJsonRequest({
-					url: deleteUserUrl,
-					method: "DELETE",
-					errorMsgContainer: $(".section-content"),
-					prependError: true,
-					success: function(data){
-						location.href="list.do?messageCode=message.delete.success&noteType=success";
+				var dialog = CMS.Dialog.show({
+					title: '提示信息',
+					custom: '确认删除？',
+					toolbar: [{
+						label: '确定',
+						cssClass: 'btn-primary aaa',
+						callback: function(){
+							_deleteUserFromServer();
+							dialog.close();
+						}
 					},
-					complete: function(){
-						self.loading = false;
-					}
+					{
+						label: '取消',
+						callback: function(){
+							dialog.close();
+						}
+					}]
 				});
+				
+				var _deleteUserFromServer = function(){
+					
+					var deleteUserUrl = "${basePath}/api/rest/user/delete/"+user.userId;
+					
+					CMS.Util.sendJsonRequest({
+						url: deleteUserUrl,
+						method: "DELETE",
+						errorMsgContainer: $(".section-content"),
+						prependError: true,
+						success: function(data){
+							location.href="list.do?messageCode=message.delete.success&noteType=success";
+						},
+						complete: function(){
+							self.loading = false;
+						}
+					});
+				}
+				
 				
 			}
 			
