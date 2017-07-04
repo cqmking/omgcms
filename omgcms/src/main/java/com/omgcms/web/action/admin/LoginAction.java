@@ -1,5 +1,7 @@
 package com.omgcms.web.action.admin;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -8,6 +10,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,11 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.omgcms.exception.CmsExceptionConstants;
 import com.omgcms.exception.CmsRuntimeException;
+import com.omgcms.model.core.User;
+import com.omgcms.service.UserService;
 
 @Controller
 public class LoginAction {
 
 	private Logger logger = LoggerFactory.getLogger(HomeIndexAction.class);
+
+	@Autowired
+	private UserService userService;
 
 	@RequestMapping("/login.do")
 	public String index(Model model) {
@@ -33,7 +41,7 @@ public class LoginAction {
 			@RequestParam(value = "oc_rememberme", required = false) boolean rememberme) {
 
 		UsernamePasswordToken token = null;
-		
+
 		Subject currentUser = SecurityUtils.getSubject();
 		if (currentUser.isAuthenticated()) {
 			return "redirect:/admin/index.do";
@@ -44,7 +52,7 @@ public class LoginAction {
 			if (StringUtils.isBlank(account) || StringUtils.isBlank(password)) {
 				throw new CmsRuntimeException(CmsExceptionConstants.LOGIN_ERROR_EMPTY_ACCOUNT_PWD);
 			}
-			
+
 			token = new UsernamePasswordToken(account, password);
 
 			if (rememberme) {
@@ -52,6 +60,13 @@ public class LoginAction {
 			}
 
 			currentUser.login(token);
+			User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+			if (user != null) {
+				user.setLastLoginDate(new Date());
+				userService.saveAndFlush(user);
+			}
+
 			return "redirect:/admin/index.do";
 
 		} catch (Exception e) {
@@ -69,7 +84,7 @@ public class LoginAction {
 			} else {
 				throw e;
 			}
-			
+
 			model.addAttribute("errorCode", errorCode);
 			if (token != null) {
 				token.clear();
@@ -79,5 +94,5 @@ public class LoginAction {
 		}
 
 	}
-	
+
 }

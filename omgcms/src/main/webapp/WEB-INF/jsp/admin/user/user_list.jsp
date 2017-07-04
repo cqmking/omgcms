@@ -83,7 +83,7 @@
 			</tbody>
 		</table>
 		
-		<cms-pagination :total-pages-num="pageInfo.totalPages" show-pages="5" show-total-count="false" :current-page-num="pageInfo.number+1" />
+		<cms-pagination :total-pages-num="pageInfo.totalPages" show-pages="5" show-total-count="false" :current-page-num="pageInfo.number+1" @change="goToPage"/>
 		
 	</section>
 	
@@ -156,7 +156,7 @@ $(function(){
 				number: 0
 			},
 			currentUser:{},
-			pageSize: 20
+			pageSize: 5
 		},
 		
 		created: function () {
@@ -177,6 +177,30 @@ $(function(){
 			
 			viewUser: function(user){
 				this.currentUser = user;
+			},
+			
+			goToPage: function(index){
+				
+				var self = this;
+				self.loading = true;
+				self.pageLoading = true;
+				
+				var getUserListUrl = "${basePath}/api/rest/user/list/page-" + index + "/page-size-"+self.pageSize;
+				
+				CMS.Util.sendJsonRequest({
+					url: getUserListUrl,
+					method: "GET",
+					errorMsgContainer: $(".section-content"),
+					prependError: false,
+					success: function(data){
+						self.pageInfo = data;
+					},
+					complete: function(){
+						self.loading = false;
+						self.pageLoading = false;
+					}
+				});
+				
 			},
 			
 			getRemotePageData: function(){
@@ -233,7 +257,7 @@ $(function(){
 					custom: '确认删除？',
 					toolbar: [{
 						label: '确定',
-						cssClass: 'btn-primary aaa',
+						cssClass: 'btn-primary',
 						callback: function(){
 							_deleteUserFromServer();
 							dialog.close();

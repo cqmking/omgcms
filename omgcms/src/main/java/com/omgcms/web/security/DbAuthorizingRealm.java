@@ -41,6 +41,8 @@ public class DbAuthorizingRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+		
+		logger.debug("doGetAuthorizationInfo function is running!");
 		// 获取登录时输入的用户名
 		// String userAccount = (String)
 		// principals.fromRealm(getName()).iterator().next(); //same as below
@@ -63,7 +65,7 @@ public class DbAuthorizingRealm extends AuthorizingRealm {
 			info.setRoles(roles);
 			// 用户的角色对应的所有权限
 			info.setStringPermissions(permissions);
-
+			
 			return info;
 		}
 
@@ -78,22 +80,21 @@ public class DbAuthorizingRealm extends AuthorizingRealm {
 
 		// UsernamePasswordToken对象用来存放提交的登录信息
 		UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-		
+
 		logger.debug("Call doGetAuthenticationInfo method to check is this a valid user:{}", token.getUsername());
 
 		// 查出是否有此用户
 		User user = userService.getByUserAccount(token.getUsername());
 		if (user != null) {
 			// 若存在，将此用户存放到登录认证info中
-			
+
 			SimpleAuthenticationInfo sai = new SimpleAuthenticationInfo(user, user.getPassword(), getName());
 			sai.setCredentialsSalt(ByteSource.Util.bytes(user.getSalt()));
 			
-			logger.debug("set salt in SimpleAuthenticationInfo and it is:{}",sai.getCredentialsSalt());
 			return sai;
-			
+
 		}
-		
+
 		return null;
 	}
 
