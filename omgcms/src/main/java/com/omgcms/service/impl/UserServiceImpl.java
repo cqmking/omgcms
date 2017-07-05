@@ -59,6 +59,12 @@ public class UserServiceImpl implements UserService {
 		userRepository.delete(userId);
 	}
 	
+	public void deleteUsers(long []userIds){
+		for(long userId:userIds){
+			userRepository.delete(userId);
+		}
+	}
+	
 	@Override
 	public User getUser(long userId){
 		

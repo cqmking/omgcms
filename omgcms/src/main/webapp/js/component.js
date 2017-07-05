@@ -125,14 +125,26 @@
     
     CustomDatatable.prototype.getSelectIds = function() {
 		var that     = this;
-		return that.getSelectRows().data("id");
+		
+		var dataArray = [];
+		that.getSelectRows().each(function(i, row){
+			var _id = $(this).data("id");
+			dataArray.push(_id);
+		});
+		
+		return dataArray;
     };
 	
     $.fn.extend({
     	
-        "customDatatable": function () {
+        "customDatatable": function (options) {
         	
         	var $table = this;
+        	
+        	if(!options.create){
+        		return new CustomDatatable($table);
+        	}
+        	
         	$table.find("th.check-all").off().on("click", function(){
         		
         		if($(this).hasClass("checked")){
@@ -142,6 +154,10 @@
         			$(this).addClass("checked");
         			$(this).closest("table.datatable").find("th.check-btn, td.check-btn").removeClass("checked").addClass("checked");
         		}
+        		
+        		if(options.onChange){
+            		options.onChange();
+            	}
         		
         	});
         	
@@ -156,7 +172,14 @@
         				$table.find("th.check-all").addClass("checked");
         			}
         		}
+        		
+        		if(options.onChange){
+            		options.onChange();
+            	}
+        		
         	});
+        	
+        	
         	
         	return new CustomDatatable($table);
         }

@@ -59,8 +59,40 @@ $(function(){
 			type = "info";
 		}
 		
+		var url = location.href;
+		var newUrl = delParam(url, "messageCode");
+		newUrl = delParam(newUrl, "noteType");
+		
+		var stateObject = {};
+		var title = "blank";
+		
+		history.pushState(stateObject, title, newUrl);
 		CMS.Util.showNoticeMessage(type, noteMessgae);
 	}
+	
+	function delParam(url,paramKey){
+	    var urlParam = url.substr(url.indexOf("?")+1);
+	    var beforeUrl = url.substr(0, url.indexOf("?"));
+	    var nextUrl = "";
+	    
+	    var arr = new Array();
+	    if(urlParam != ""){
+	        var urlParamArr = urlParam.split("&");
+	      
+	        for(var i=0;i<urlParamArr.length;i++){
+	            var paramArr = urlParamArr[i].split("=");
+	            if(paramArr[0]!=paramKey){
+	                arr.push(urlParamArr[i]);
+	            }
+	        }
+	    }
+	     
+	    if(arr.length>0){
+	        nextUrl = "?"+arr.join("&");
+	    }
+	    url = beforeUrl + nextUrl;
+	    return url;
+	};
 	
 });
 </script>

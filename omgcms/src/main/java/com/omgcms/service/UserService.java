@@ -14,6 +14,8 @@ public interface UserService {
 	
 	void deleteUser(long userId);
 	
+	void deleteUsers(long []userIds);
+	
 	User getUser(long userId);
 
 	Page<User> findUsers(int pageNo, int pageSize, String orderByProperty, String sortType);

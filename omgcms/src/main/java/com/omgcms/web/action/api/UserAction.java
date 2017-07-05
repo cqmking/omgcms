@@ -22,6 +22,7 @@ import com.omgcms.model.core.User;
 import com.omgcms.service.UserService;
 import com.omgcms.util.CmsConstants;
 import com.omgcms.util.CmsUtil;
+import com.omgcms.util.StringPool;
 import com.omgcms.web.action.admin.HomeIndexAction;
 import com.omgcms.web.util.ParamUtil;
 
@@ -70,7 +71,7 @@ public class UserAction {
 		return user;
 
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/delete/{userId}", method = RequestMethod.DELETE)
 	public boolean deleteUser(@PathVariable(value = "userId") Integer userId) {
@@ -79,6 +80,27 @@ public class UserAction {
 		
 		userService.deleteUser(userId);
 		
+		return true;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/batchDelete/{userIds}", method = RequestMethod.DELETE)
+	public boolean deleteUsers(@PathVariable(value = "userIds") String userIds) {
+
+		userIds = ParamUtil.get(userIds, StringPool.BLANK);
+		if (StringUtils.isBlank(userIds)) {
+			return false;
+		}
+		String[] idsStr = userIds.split(StringPool.COMMA);
+		long[] _userIds = new long[idsStr.length];
+		
+		for (int i = 0; i < idsStr.length; i++) {
+			_userIds[i] = Long.valueOf(idsStr[i]);
+		}
+		
+		logger.debug("Will delete users with ids:{}", userIds);
+		userService.deleteUsers(_userIds);
+
 		return true;
 	}
 

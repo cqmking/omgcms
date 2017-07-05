@@ -54,7 +54,7 @@ public class CmsUtil {
 		return sysInfo;
 
 	}
-
+	
 	public static String objectToJsonString(Object dataObject) {
 
 		try {
@@ -76,7 +76,17 @@ public class CmsUtil {
 
 		return "";
 	}
-
+	
+	public static void setSessionMessage(HttpServletRequest request, String msgCode){
+		request.getSession().setAttribute(CmsConstants.SESSION_MSG_KEY, msgCode);
+	}
+	
+	public static String getAndClearSessionMessage(HttpServletRequest request){
+		String msg = (String)request.getSession().getAttribute(CmsConstants.SESSION_MSG_KEY);
+		request.getSession().removeAttribute(CmsConstants.SESSION_MSG_KEY);
+		return msg;
+	}
+	
 	public static String getLocaleMessage(String msgKeyCode) {
 		return ExceptionI18nMessage.getLocaleMessage(msgKeyCode);
 	}

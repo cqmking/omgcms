@@ -39,6 +39,8 @@ public class LoadVariableInterceptor implements HandlerInterceptor {
 		String messageCode = request.getParameter("messageCode");
 		String noteType = request.getParameter("noteType");
 		
+		logger.debug("request.getRequestURL():{}", request.getRequestURL());
+		
 		if(!StringUtils.isBlank(messageCode)){
 			String noteMessgae = CmsUtil.getLocaleMessage(messageCode);
 			request.setAttribute("noteMessgae", noteMessgae);

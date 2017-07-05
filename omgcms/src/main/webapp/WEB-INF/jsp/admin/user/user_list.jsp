@@ -36,8 +36,8 @@
 					<li>
 						<a href="add.do"><s:message code="label.common.add" /></a>
 					</li>
-					<li>
-						<a href="javascript:;"><s:message code="label.common.delete" /></a>
+					<li v-show="showBatchDelete">
+						<a href="javascript:;" @click.prevent="deleteSelectedUser"><s:message code="label.common.delete" /></a>
 					</li>
 				</ul>
 			</li>
@@ -61,7 +61,7 @@
 			</thead>
 			<tbody>
 				<tr v-for="(user, index) in pageInfo.content">
-					<td data-index="check" class="check-row check-btn"><i class="icon-check-empty"></i></td>
+					<td data-index="check" :data-id="user.userId" class="check-row check-btn"><i class="icon-check-empty"></i></td>
 					<td>{{user.userId}}</td>
 					<td>{{user.userAccount}}</td>
 					<td>{{user.userName}}</td>
@@ -142,6 +142,7 @@
 <script type="text/javascript">
 $(function(){
 	
+	
 	var pageVue = new Vue({
 		
 		el: '#page-content',
@@ -149,6 +150,7 @@ $(function(){
 		data: {
 			loading: true,
 			pageLoading: true,
+			showBatchDelete: false,
 			pageInfo:{
 				content:[],
 				totalPages: 0,
@@ -156,7 +158,7 @@ $(function(){
 				number: 0
 			},
 			currentUser:{},
-			pageSize: 5
+			pageSize: 10
 		},
 		
 		created: function () {
@@ -165,7 +167,14 @@ $(function(){
 		},
 		
 		updated: function(){
-			$("table.datatable").customDatatable();
+			var self = this;
+			var $dataTable = $("table.datatable").customDatatable({
+				create: true,
+				onChange: function(){
+					var selectedIds = $dataTable.getSelectIds();
+					self.showBatchDelete = (selectedIds.length > 0);
+				}
+			});
 		},
 		
 		methods: {
@@ -236,7 +245,7 @@ $(function(){
 			getLoginDateTime: function(dateTimeStamp, formatString){
 				var self = this;
 				if(dateTimeStamp==null){
-					return '<s:message code="label.user.never.login" />';
+					return "${cmsUtil.getLocaleMessage('label.user.never.login')}";
 				}
 				return self.formatDate(dateTimeStamp, formatString);
 			},
@@ -250,13 +259,19 @@ $(function(){
 				return sexText[key];
 			},
 			
-			deleteUser: function(user){
+			deleteSelectedUser:function(){
+				var $dataTable = $("table.datatable").customDatatable({create: false});
+				var selectedIds = $dataTable.getSelectIds();
+				
+				if(selectedIds.length <= 0){
+					return;
+				}
 				
 				var dialog = CMS.Dialog.show({
-					title: '提示信息',
-					custom: '确认删除？',
+					title: '${cmsUtil.getLocaleMessage("label.common.notice")}',
+					custom: '${cmsUtil.getLocaleMessage("label.common.delete.confirm")}',
 					toolbar: [{
-						label: '确定',
+						label: '${cmsUtil.getLocaleMessage("label.common.ok")}',
 						cssClass: 'btn-primary',
 						callback: function(){
 							_deleteUserFromServer();
@@ -264,7 +279,47 @@ $(function(){
 						}
 					},
 					{
-						label: '取消',
+						label: '${cmsUtil.getLocaleMessage("label.common.cancel")}',
+						callback: function(){
+							dialog.close();
+						}
+					}]
+				});
+				
+				var _deleteUserFromServer = function(){
+					
+					var deleteUsersUrl = "${basePath}/api/rest/user/batchDelete/"+selectedIds.join(",");
+					
+					CMS.Util.sendJsonRequest({
+						url: deleteUsersUrl,
+						method: "DELETE",
+						errorMsgContainer: $(".section-content"),
+						prependError: true,
+						success: function(data){
+							location.href="list.do?messageCode=message.delete.success&noteType=success";
+						},
+						complete: function(){
+							self.loading = false;
+						}
+					});
+				}
+			},
+			
+			deleteUser: function(user){
+				
+				var dialog = CMS.Dialog.show({
+					title: '${cmsUtil.getLocaleMessage("label.common.notice")}',
+					custom: '${cmsUtil.getLocaleMessage("label.common.delete.confirm")}',
+					toolbar: [{
+						label: '${cmsUtil.getLocaleMessage("label.common.ok")}',
+						cssClass: 'btn-primary',
+						callback: function(){
+							_deleteUserFromServer();
+							dialog.close();
+						}
+					},
+					{
+						label: '${cmsUtil.getLocaleMessage("label.common.cancel")}',
 						callback: function(){
 							dialog.close();
 						}

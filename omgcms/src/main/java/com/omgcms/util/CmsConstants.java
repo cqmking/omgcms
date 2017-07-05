@@ -17,4 +17,6 @@ public class CmsConstants {
 	public static final String MSG_STATUS_SUCCESS = "success";
 	
 	
+	public static final String SESSION_MSG_KEY = "show.message";
+	
 }
