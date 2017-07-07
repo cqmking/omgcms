@@ -23,7 +23,6 @@ import com.omgcms.service.UserService;
 import com.omgcms.util.CmsConstants;
 import com.omgcms.util.CmsUtil;
 import com.omgcms.util.StringPool;
-import com.omgcms.web.action.admin.HomeIndexAction;
 import com.omgcms.web.util.ParamUtil;
 
 /***
@@ -36,7 +35,7 @@ import com.omgcms.web.util.ParamUtil;
 @RequestMapping("/user")
 public class UserAction {
 
-	private Logger logger = LoggerFactory.getLogger(HomeIndexAction.class);
+	private Logger logger = LoggerFactory.getLogger(UserAction.class);
 
 	@Autowired
 	private UserService userService;

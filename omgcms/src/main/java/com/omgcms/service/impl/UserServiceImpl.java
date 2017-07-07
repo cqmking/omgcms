@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
 			direction = Direction.DESC;
 		}
 
-		Order idOrder = new Order(direction, "userId");
+		Order idOrder = new Order(direction, orderByProperty);
 		Sort sort = new Sort(idOrder);
 
 		PageRequest pageable = new PageRequest(pageNo - 1, pageSize, sort);

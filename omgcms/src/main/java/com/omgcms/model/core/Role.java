@@ -1,48 +1,37 @@
 package com.omgcms.model.core;
 
+import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 @Table(name = "role_")
 @Entity
-public class Role {
+public class Role implements Serializable{
 	
+	private static final long serialVersionUID = 6824683931019456228L;
+
 	private Long roleId;
 
 	private String name;
 	
+	/**
+	 * 角色编码(例如 sysadmin->（对应）系统管理员)
+	 */
 	private String roleKey;
 
 	private String description;
 	
-	/**
-	 * 创建该角色的用户userId
-	 */
-	private Long userId;
-
-	/**
-	 * 创建该角色的用户账号
-	 */
-	private String userAccount;
-
 	private Date createDate;
 
 	private Date modifyDate;
 	
-	private Set<Permission> permissions;
-	
-
 	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", allocationSize = 1, pkColumnName = "name", pkColumnValue = "roleId", valueColumnName = "value")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "ID_GENERATOR")
 	@Id
@@ -79,23 +68,7 @@ public class Role {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
-
-	public String getUserAccount() {
-		return userAccount;
-	}
-
-	public void setUserAccount(String userAccount) {
-		this.userAccount = userAccount;
-	}
-
+	
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -112,17 +85,4 @@ public class Role {
 		this.modifyDate = modifyDate;
 	}
 	
-	// referencedColumnName 当前表的字段
-	@JoinTable(name = "role_permission", joinColumns = { @JoinColumn(name = "roleId") }, inverseJoinColumns = {
-			@JoinColumn(name = "permissionId") })
-	@ManyToMany
-	public Set<Permission> getPermissions() {
-		return permissions;
-	}
-	
-	public void setPermissions(Set<Permission> permissions) {
-		this.permissions = permissions;
-	}
-	
-
 }

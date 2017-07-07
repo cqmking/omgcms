@@ -21,10 +21,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.omgcms.model.core.Permission;
+import com.omgcms.model.core.ResourcePermission;
 import com.omgcms.model.core.Role;
 import com.omgcms.model.core.User;
-import com.omgcms.service.PermissionService;
+import com.omgcms.service.ResourcePermissionService;
 import com.omgcms.service.UserService;
 
 public class DbAuthorizingRealm extends AuthorizingRealm {
@@ -34,7 +34,7 @@ public class DbAuthorizingRealm extends AuthorizingRealm {
 	@Autowired
 	private UserService userService;
 	@Autowired
-	private PermissionService permissionService;
+	private ResourcePermissionService permissionService;
 
 	/**
 	 * 角色权限认证
@@ -56,15 +56,13 @@ public class DbAuthorizingRealm extends AuthorizingRealm {
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
 			Set<Role> rolesSet = user.getUserRoles();
-			List<Permission> permissionsList = permissionService.findPermissionsByRoles(new ArrayList<Role>(rolesSet));
-
+			
 			Set<String> roles = getRolesFromCollection(rolesSet);
-			Set<String> permissions = getPermissionsFromCollection(permissionsList);
-
+			
 			// 用户的角色集合
 			info.setRoles(roles);
 			// 用户的角色对应的所有权限
-			info.setStringPermissions(permissions);
+			// info.setStringPermissions(permissions);
 			
 			return info;
 		}
@@ -116,12 +114,12 @@ public class DbAuthorizingRealm extends AuthorizingRealm {
 		return roles;
 	}
 
-	private Set<String> getPermissionsFromCollection(Collection<Permission> permissionCollection) {
+	private Set<String> getPermissionsFromCollection(Collection<ResourcePermission> permissionCollection) {
 
 		Set<String> permissions = new HashSet<String>();
-		for (Permission permission : permissionCollection) {
-			permissions.add(permission.getPermissionKey());
-		}
+//		for (ResourcePermission permission : permissionCollection) {
+//			permissions.add(permission.getPermissionKey());
+//		}
 		return permissions;
 
 	}

@@ -46,7 +46,7 @@
 				/admin/checkLogin.do=anon
 				/admin/logout.do=anon
 				/admin/**=authc
-				/api/**=authc
+				<!-- /api/**=authc -->
 			</value>
 		</property>
 	</bean>

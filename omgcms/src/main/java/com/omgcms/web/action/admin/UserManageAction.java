@@ -11,18 +11,19 @@ import com.omgcms.web.util.ParamUtil;
 
 @Controller
 @RequestMapping("/user")
-public class UserManagementAction {
+public class UserManageAction {
 
-	private Logger logger = LoggerFactory.getLogger(UserManagementAction.class);
+	private Logger logger = LoggerFactory.getLogger(UserManageAction.class);
 
 	@RequestMapping("/index.do")
 	public String index(Model model) {
+		logger.debug("Redirect to /admin/user/list.do");
+		
 		return "redirect:/admin/user/list.do";
 	}
 
 	@RequestMapping("/list.do")
-	public String userList(Model model, @RequestParam(required = false) String messageCode) {
-		logger.debug("View user list with message code {}!", messageCode);
+	public String userList(Model model) {
 		
 		return "admin/user/user_list";
 	}

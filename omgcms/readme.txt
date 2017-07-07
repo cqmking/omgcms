@@ -1,7 +1,10 @@
 PLAN:
 ----- V1.0-----
 0. Shiro security, System Menu, User CRUD (no D)		OK
-1. Delete User, Search User											
+1. UserManage
+	1.1 Delete User										OK
+	1.2 Batch delete									OK
+	1.3 Search User											
 2. Role CURD
 	2.1 Role create, Role Update
 	2.2 Role delete

@@ -6,7 +6,7 @@
         props: ['totalPagesNum', 'currentPageNum', 'showPages', 'showTotalCount', 'labels'],
         
         template: '\
-        		<div class="cms_custom_pagination">\
+        		<div class="cms_custom_pagination" v-show="totalPagesNum>0">\
 	        		<div class="cust_pagination_total" v-show="showTotal">{{navLabels.total}}{{parseInt(totalPagesNum)}}{{navLabels.page}}</div>\
 	                <ul class="pager pagination">\
 	                    <li class="previous" :class="{disabled : (currentPage - 1) < 1}"><a href="#" @click.prevent="gotoPage($event,currentPage-1)"><i class="icon icon-double-angle-left"></i></a></li>\
