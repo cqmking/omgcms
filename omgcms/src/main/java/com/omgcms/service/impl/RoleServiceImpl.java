@@ -26,8 +26,8 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public Role getRole(long roleId) {
-		return roleRepository.getOne(roleId);
+	public Role getByRoleId(long roleId) {
+		return roleRepository.getByRoleId(roleId);
 	}
 	
 	@Override
@@ -46,6 +46,28 @@ public class RoleServiceImpl implements RoleService {
 		Page<Role> page = roleRepository.findAll(pageable);
 
 		return page;
+	}
+
+	@Override
+	public void deleteRole(long roleId) {
+		roleRepository.delete(roleId);
+	}
+
+	@Override
+	public void deleteRoles(long[] roleIds) {
+		for(long roleId:roleIds){
+			roleRepository.delete(roleId);
+		}
+	}
+
+	@Override
+	public Role getByName(String name) {
+		return roleRepository.getByName(name);
+	}
+	
+	@Override
+	public Role getByRoleKey(String roleKey) {
+		return roleRepository.getByRoleKey(roleKey);
 	}
 
 }

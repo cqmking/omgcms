@@ -46,7 +46,7 @@
 					<th><s:message code="label.common.name" /></th>
 					<th><s:message code="label.common.code" /></th>
 					<th><s:message code="label.common.description" /></th>
-					<th><s:message code="label.common.operation" /></th>
+					<th style="width: 200px;"><s:message code="label.common.operation" /></th>
 				</tr>
 			</thead>
 			<tbody>

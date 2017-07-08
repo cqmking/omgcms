@@ -125,7 +125,10 @@ public class UserAction {
 		if (user.getBirthday() == null) {
 			user.setBirthday(new GregorianCalendar(1970, 0, 1).getTime());
 		}
-		user.setCreateDate(new Date());
+		
+		Date now = new Date();
+		user.setCreateDate(now);
+		user.setModifyDate(now);
 
 		User savedUser = userService.saveAndFlush(user);
 

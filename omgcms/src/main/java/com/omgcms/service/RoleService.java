@@ -8,7 +8,15 @@ public interface RoleService {
 
 	Role saveAndFlush(Role userRole);
 	
-	Role getRole(long roleId);
+	Role getByRoleId(long roleId);
+	
+	Role getByName(String name);
+	
+	Role getByRoleKey(String roleKey);
+	
+	void deleteRole(long roleId);
+	
+	void deleteRoles(long []roleIds);
 	
 	Page<Role> findRoles(int pageNo, int pageSize, String orderByProperty, String sortType);
 	
