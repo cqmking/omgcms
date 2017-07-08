@@ -62,13 +62,16 @@ public class CmsExceptionHandler extends SimpleMappingExceptionResolver {
 						} else {
 							errorMessage = ex.getMessage();
 						}
-
+						
+						logger.warn(ex.toString());
+						
 					} else {
 						errorMessage = ex.getMessage();
+						// 将异常栈信息记录到日志中
+						logger.error(getTrace(ex));
 					}
 
-					// 将异常栈信息记录到日志中
-					logger.error(getTrace(ex));
+					
 
 					writeResponseForJson(response, errorMessage);
 

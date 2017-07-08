@@ -101,7 +101,7 @@ public class RoleAction {
 	public Role createRole(@RequestBody Role role) {
 
 		validateRole(role, true);
-		
+
 		Date now = new Date();
 		role.setCreateDate(now);
 		role.setModifyDate(now);
@@ -114,48 +114,54 @@ public class RoleAction {
 	@ResponseBody
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public Role updateRole(@RequestBody Role role) {
-		
+
 		validateRole(role, false);
-		
+
 		Role savedRole = roleService.getByRoleId(role.getRoleId());
-		
+
 		Date now = new Date();
 		savedRole.setModifyDate(now);
 		savedRole.setName(role.getName());
 		savedRole.setRoleKey(role.getRoleKey());
 		savedRole.setDescription(role.getDescription());
-		
+
 		Role _role = roleService.saveAndFlush(savedRole);
-		
+
 		return _role;
 	}
-	
+
 	private boolean validateRole(Role role, boolean isNew) {
 
 		if (StringUtils.isBlank(role.getRoleKey())) {
-			throw new CmsRuntimeException("error.form.field.required", new Object[] { CmsUtil.getLocaleMessage("label.common.code") });
+			throw new CmsRuntimeException("error.form.field.required", new Object[] { CmsUtil.getLocaleMessage("label.common.code") },
+					"Role key should not be null");
 		}
-		
+
 		if (StringUtils.isBlank(role.getName())) {
-			throw new CmsRuntimeException("error.form.field.required", new Object[] { CmsUtil.getLocaleMessage("label.common.name") });
+			throw new CmsRuntimeException("error.form.field.required", new Object[] { CmsUtil.getLocaleMessage("label.common.name") },
+					"Role name should not be null");
 		}
 		
 		if (isNew) {
 
 			Role roleByRoleKey = roleService.getByRoleKey(role.getRoleKey());
 			if (roleByRoleKey != null) {
-				throw new CmsRuntimeException("error.object.already.exsit", new Object[] {
-						CmsUtil.getLocaleMessage("label.common.code"), role.getRoleKey(), CmsUtil.getLocaleMessage("label.role") });
+				throw new CmsRuntimeException("error.object.already.exsit",
+						new Object[] { CmsUtil.getLocaleMessage("label.common.code"), role.getRoleKey(),
+								CmsUtil.getLocaleMessage("label.role") },
+						"There already had a role with roleKey ".concat("[").concat(role.getRoleKey()).concat("]"));
 			}
-			
+
 			Role roleByName = roleService.getByName(role.getName());
 			if (roleByName != null) {
-				throw new CmsRuntimeException("error.object.already.exsit", new Object[] {
-						CmsUtil.getLocaleMessage("label.common.name"), role.getName(), CmsUtil.getLocaleMessage("label.role") });
+				throw new CmsRuntimeException("error.object.already.exsit",
+						new Object[] { CmsUtil.getLocaleMessage("label.common.name"), role.getName(),
+								CmsUtil.getLocaleMessage("label.role") },
+						"There already had a role with roleName ".concat("[").concat(role.getName()).concat("]"));
 			}
-			
+
 		}
-		
+
 		return true;
 	}
 
