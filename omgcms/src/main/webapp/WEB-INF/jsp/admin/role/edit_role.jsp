@@ -13,6 +13,8 @@
 	<title><s:message code="label.role.update" /></title>
 </c:if>
 
+<script src="${basePath}/thirdparty/validform/Validform_v5.3.2_min.js"></script>
+
 <style type="text/css">
 h3{
 	font-size: 14px;
@@ -64,26 +66,34 @@ input.normal {
 	</section>
 	
 	<section class="section-content" v-show="!loading" style="display: none;">
-		<form class="form-horizontal">
+		<form class="form-horizontal edit-form">
 			<h3><s:message code="label.common.basic.info" /></h3>
 			<div class="form-group">
 				<label class="col-sm-1"><s:message code="label.common.code" /></label>
 				<div class="col-sm-11">
-					<input name="roleKey" type="text" v-model.trim="role.roleKey" class="form-control normal" placeholder="<s:message code="label.common.code" />">
+					<input name="roleKey" datatype="s2-20" type="text" v-model.trim="role.roleKey" 
+						nullmsg="<s:message code="error.form.field.required" arguments="${cmsUtil.getLocaleMessage('label.common.code')}"/>" 
+						errormsg="<s:message code="error.form.filed.length" arguments="${cmsUtil.getLocaleMessage('label.common.code')},2,20"/>" 
+						sucmsg=" " class="form-control normal" maxlength="20" placeholder="<s:message code="label.common.code" />">
 				</div>
 			</div>
+			
 			<div class="form-group">
 				<label class="col-sm-1"><s:message code="label.common.name" /></label>
 				<div class="col-sm-11">
-					<input name="roleName" type="text" v-model.trim="role.name" class="form-control normal" placeholder="<s:message code="label.common.name" />">
+					<input name="roleName" type="text" v-model.trim="role.name" class="form-control normal" placeholder="<s:message code="label.common.name" />"
+						sucmsg=" " datatype="s2-20" nullmsg="<s:message code="error.form.field.required" arguments="${cmsUtil.getLocaleMessage('label.common.name')}"/>" 
+						errormsg="<s:message code="error.form.filed.length" arguments="${cmsUtil.getLocaleMessage('label.common.name')},2,20"/>" >
 				</div>
 			</div>
+			
 			<div class="form-group">
 				<label class="col-sm-1"><s:message code="label.common.description" /></label>
 				<div class="col-sm-11" style="width: 70%;">
 					<textarea rows="3" name="description" v-model.trim="role.description" class="form-control normal" placeholder="<s:message code="label.common.description" />"></textarea>
 				</div>
 			</div>
+			
 			<div class="form-group">
 				<div class="col-sm-offset-1 col-sm-11">
 					<button type="button" class="btn btn-primary" @click.prevent="saveRole"><s:message code="label.common.save" /></button>
@@ -148,6 +158,11 @@ $(function(){
 			saveRole: function(){
 				var self = this;
 				
+				if(!formValidator.check(false)){
+					// Not pass the validation
+					return;
+				}
+				
 				var saveUrl = "${basePath}/api/rest/role/";
 				if(self.role.roleId){
 					saveUrl+="update"
@@ -180,6 +195,12 @@ $(function(){
 			
 		}
 		
+	});
+	
+	
+	var formValidator = $(".edit-form").Validform({
+		 tiptype:3,
+		 showAllError: true
 	});
 	
 });
