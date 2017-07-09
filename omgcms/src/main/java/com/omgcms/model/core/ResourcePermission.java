@@ -25,7 +25,7 @@ public class ResourcePermission implements Serializable{
 	private Long primaryKey;
 	
 	private Long roleId;
-
+	
 	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", allocationSize = 1, pkColumnName = "name", pkColumnValue = "resourcePermissionId", valueColumnName = "value")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "ID_GENERATOR")
 	@Id

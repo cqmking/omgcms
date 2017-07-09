@@ -31,24 +31,6 @@ public class RoleServiceImpl implements RoleService {
 	}
 	
 	@Override
-	public Page<Role> findRoles(int pageNo, int pageSize, String orderByProperty, String sortType) {
-		Direction direction = Direction.ASC;
-
-		if ("DESC".equals(sortType)) {
-			direction = Direction.DESC;
-		}
-
-		Order idOrder = new Order(direction, orderByProperty);
-		Sort sort = new Sort(idOrder);
-
-		PageRequest pageable = new PageRequest(pageNo - 1, pageSize, sort);
-
-		Page<Role> page = roleRepository.findAll(pageable);
-
-		return page;
-	}
-
-	@Override
 	public void deleteRole(long roleId) {
 		roleRepository.delete(roleId);
 	}
@@ -69,5 +51,24 @@ public class RoleServiceImpl implements RoleService {
 	public Role getByRoleKey(String roleKey) {
 		return roleRepository.getByRoleKey(roleKey);
 	}
+	
+	@Override
+	public Page<Role> findRoles(int pageNo, int pageSize, String orderByProperty, String sortType) {
+		Direction direction = Direction.ASC;
 
+		if ("DESC".equals(sortType)) {
+			direction = Direction.DESC;
+		}
+
+		Order idOrder = new Order(direction, orderByProperty);
+		Sort sort = new Sort(idOrder);
+
+		PageRequest pageable = new PageRequest(pageNo - 1, pageSize, sort);
+
+		Page<Role> page = roleRepository.findAll(pageable);
+
+		return page;
+	}
+	
+	
 }

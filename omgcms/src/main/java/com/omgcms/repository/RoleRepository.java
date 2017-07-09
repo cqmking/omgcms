@@ -7,7 +7,11 @@ import com.omgcms.model.core.Role;
 
 public interface RoleRepository extends JpaSpecificationExecutor<Role>, JpaRepository<Role, Long> {
 
-	// 根据 roleId 获取角色信息
+	/**
+	 * Get Role by roleId
+	 * @param roleId role id
+	 * @return Role
+	 */
 	public Role getByRoleId(long roleId);
 
 	public Role getByName(String name);

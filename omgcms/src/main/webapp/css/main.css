@@ -99,6 +99,11 @@ h1, h2, h3, h4, h5, h6 {
     margin: 50px auto;
 }
 
+.dropdown-menu>li>a:hover, 
+.dropdown-menu>li>a:focus {
+    background-color: #039BE5;
+}
+
 /***Main Css***/
 html, body{
 	margin: 0;

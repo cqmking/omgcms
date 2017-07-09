@@ -42,5 +42,11 @@ public class UserManageAction {
 
 		return "admin/user/edit_user";
 	}
-
+	
+	@RequestMapping("/assign_user_roles.do")
+	public String assignUserRoles(Model model, @RequestParam(value = "userId") Long userId) {
+		userId = ParamUtil.get(userId, -1);
+		model.addAttribute("userId", userId);
+		return "admin/user/assign_user_roles";
+	}
 }

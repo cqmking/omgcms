@@ -1,23 +1,28 @@
 package com.omgcms.model.core;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Table(name = "group_")
 @Entity
-public class Group {
-	
+public class Group implements Serializable{
+		
+	private static final long serialVersionUID = -585584786875243690L;
+
 	private Long groupId;
 	
 	private String name;
@@ -38,18 +43,11 @@ public class Group {
 	
 	private Date modifyDate;
 	
-	private Set<Role> groupRoles;
+	@JsonIgnore
+	private Set<UserGroup> userGroups;
 	
-	@JoinTable(name = "group_role", joinColumns = { @JoinColumn(name = "groupId") }, inverseJoinColumns = {
-			@JoinColumn(name = "roleId") })
-	@ManyToMany
-	public Set<Role> getGroupRoles() {
-		return groupRoles;
-	}
-	
-	public void setGroupRoles(Set<Role> groupRoles) {
-		this.groupRoles = groupRoles;
-	}
+	@JsonIgnore
+	private Set<GroupRole> groupRoles;
 	
 	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", allocationSize=1 ,pkColumnName = "name", pkColumnValue = "groupId", valueColumnName = "value")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "ID_GENERATOR")
@@ -109,6 +107,24 @@ public class Group {
 
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
+	}
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "group", fetch = FetchType.LAZY)
+	public Set<UserGroup> getUserGroups() {
+		return userGroups;
+	}
+	
+	public void setUserGroups(Set<UserGroup> userGroups) {
+		this.userGroups = userGroups;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "group", fetch = FetchType.LAZY)
+	public Set<GroupRole> getGroupRoles() {
+		return groupRoles;
+	}
+
+	public void setGroupRoles(Set<GroupRole> groupRoles) {
+		this.groupRoles = groupRoles;
 	}
 	
 	

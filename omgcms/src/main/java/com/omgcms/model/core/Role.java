@@ -2,14 +2,20 @@ package com.omgcms.model.core;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "role_")
 @Entity
@@ -31,6 +37,12 @@ public class Role implements Serializable{
 	private Date createDate;
 
 	private Date modifyDate;
+	
+	@JsonIgnore
+	private Set<UserRole> userRoles;
+	
+	@JsonIgnore
+	private Set<GroupRole> groupRoles;
 	
 	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", allocationSize = 1, pkColumnName = "name", pkColumnValue = "roleId", valueColumnName = "value")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "ID_GENERATOR")
@@ -83,6 +95,24 @@ public class Role implements Serializable{
 
 	public void setModifyDate(Date modifyDate) {
 		this.modifyDate = modifyDate;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "role", fetch = FetchType.LAZY)
+	public Set<UserRole> getUserRoles() {
+		return userRoles;
+	}
+	
+	public void setUserRoles(Set<UserRole> userRoles) {
+		this.userRoles = userRoles;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "role", fetch = FetchType.LAZY)
+	public Set<GroupRole> getGroupRoles() {
+		return groupRoles;
+	}
+
+	public void setGroupRoles(Set<GroupRole> groupRoles) {
+		this.groupRoles = groupRoles;
 	}
 	
 }

@@ -26,6 +26,8 @@ public class CmsExceptionHandler extends SimpleMappingExceptionResolver {
 	@Override
 	protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 
+		logger.warn(ex.toString());
+		
 		String viewName = determineViewName(ex, request);
 
 		// vm方式返回

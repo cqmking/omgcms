@@ -1,38 +1,41 @@
 package com.omgcms.model.core;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "user_")
 @Entity
-public class User implements Serializable{
-	
-	private static final long serialVersionUID = 4638652228669149914L;
-	
-	private Long userId;
+public class User implements Serializable {
 
+	private static final long serialVersionUID = 4638652228669149914L;
+
+	private Long userId;
+	
 	private String userAccount;
 
 	private String userName;
 
 	private String password;
-	
+
 	private String sex;
 
 	private String email;
@@ -48,18 +51,18 @@ public class User implements Serializable{
 	private String description;
 
 	private String address;
-	
+
 	private String salt;
 
 	private Date createDate;
 
 	private Date modifyDate;
+
+	@JsonIgnore
+	private Set<UserRole> userRoles;
 	
 	@JsonIgnore
-	private Set<Role> userRoles;
-	
-	@JsonIgnore
-	private Set<Group> userGroups;
+	private Set<UserGroup> userGroups;
 	
 	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", allocationSize = 1, pkColumnName = "name", pkColumnValue = "userId", valueColumnName = "value")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "ID_GENERATOR")
@@ -67,7 +70,7 @@ public class User implements Serializable{
 	public Long getUserId() {
 		return userId;
 	}
-	
+
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
@@ -110,7 +113,7 @@ public class User implements Serializable{
 	public String getEmail() {
 		return email;
 	}
-	
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -127,7 +130,7 @@ public class User implements Serializable{
 	public Date getBirthday() {
 		return birthday;
 	}
-	
+
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
@@ -139,7 +142,7 @@ public class User implements Serializable{
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
+
 	public Date getLastLoginDate() {
 		return lastLoginDate;
 	}
@@ -164,7 +167,7 @@ public class User implements Serializable{
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
+
 	@JsonIgnore
 	public String getSalt() {
 		return salt;
@@ -190,27 +193,36 @@ public class User implements Serializable{
 		this.modifyDate = modifyDate;
 	}
 
-	// referencedColumnName 当前表的字段
-	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
-			@JoinColumn(name = "roleId") })
-	@ManyToMany
-	public Set<Role> getUserRoles() {
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+	public Set<UserRole> getUserRoles() {
 		return userRoles;
 	}
 
-	public void setUserRoles(Set<Role> userRoles) {
+	public void setUserRoles(Set<UserRole> userRoles) {
 		this.userRoles = userRoles;
 	}
-
-	@JoinTable(name = "user_group", joinColumns = { @JoinColumn(name = "userId") }, inverseJoinColumns = {
-			@JoinColumn(name = "groupId") })
-	@ManyToMany
-	public Set<Group> getUserGroups() {
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+	public Set<UserGroup> getUserGroups() {
 		return userGroups;
 	}
 
-	public void setUserGroups(Set<Group> userGroups) {
+	public void setUserGroups(Set<UserGroup> userGroups) {
 		this.userGroups = userGroups;
 	}
-	
+
+	@JsonIgnore
+	@Transient
+	public List<Role> getRoles() {
+		
+		Set<UserRole> _userRoles = getUserRoles();
+
+		List<Role> roles = new ArrayList<Role>(_userRoles.size());
+		for (UserRole _userRole : _userRoles) {
+			roles.add(_userRole.getRole());
+		}
+		
+		return roles;
+	}
+
 }

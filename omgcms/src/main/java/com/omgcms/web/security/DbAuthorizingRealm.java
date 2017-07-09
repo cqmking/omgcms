@@ -1,9 +1,7 @@
 package com.omgcms.web.security;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.shiro.SecurityUtils;
@@ -55,12 +53,12 @@ public class DbAuthorizingRealm extends AuthorizingRealm {
 			// 权限信息对象info,用来存放查出的用户的所有的角色（role）及权限（permission）
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-			Set<Role> rolesSet = user.getUserRoles();
+			// Set<Role> rolesSet = user.getUserRoles();
 			
-			Set<String> roles = getRolesFromCollection(rolesSet);
+			// Set<String> roles = getRolesFromCollection(rolesSet);
 			
 			// 用户的角色集合
-			info.setRoles(roles);
+			// info.setRoles(roles);
 			// 用户的角色对应的所有权限
 			// info.setStringPermissions(permissions);
 			

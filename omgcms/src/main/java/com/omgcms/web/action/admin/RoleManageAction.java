@@ -29,7 +29,6 @@ public class RoleManageAction {
 	
 	@RequestMapping("/edit.do")
 	public String editRole(Model model, @RequestParam(value = "roleId", required = false) Long roleId) {
-		logger.debug("编辑页面!");
 		roleId = ParamUtil.get(roleId, -1);
 
 		model.addAttribute("roleId", roleId);
@@ -38,8 +37,8 @@ public class RoleManageAction {
 	
 	@RequestMapping("/add.do")
 	public String addRole(Model model) {
-
+		
 		return "admin/role/edit_role";
 	}
-
+	
 }
