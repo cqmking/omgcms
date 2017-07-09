@@ -20,6 +20,6 @@ public interface RoleService {
 	
 	Page<Role> findRoles(int pageNo, int pageSize, String orderByProperty, String sortType);
 	
-	// Page<Role> findRolesByUserId(int pageNo, int pageSize, String orderByProperty, String sortType, long userId);
+	Page<Role> findRolesByUserId(int pageNo, int pageSize, String orderByProperty, String sortType, long userId);
 	
 }

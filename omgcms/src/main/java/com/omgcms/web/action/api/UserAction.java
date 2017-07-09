@@ -49,7 +49,7 @@ public class UserAction {
 		pageSize = ParamUtil.get(pageSize, CmsConstants.ADMIN_PAGE_SIZE);
 
 		Page<User> usersPage = userService.findUsers(pageNum, pageSize, "userId", CmsConstants.ORDER_ASC);
-
+		
 		return usersPage;
 	}
 

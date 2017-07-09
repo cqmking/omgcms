@@ -43,6 +43,8 @@ public class RoleAction {
 
 		Page<Role> pageRoles = roleService.findRoles(pageNum, pageSize, "roleId", CmsConstants.ORDER_ASC);
 
+		Page<Role> findRolesByUsers = roleService.findRolesByUserId(1, 5, "roleKey", CmsConstants.ORDER_ASC, 2059);
+		System.out.println("============>>>"+findRolesByUsers.getTotalElements());
 		return pageRoles;
 	}
 

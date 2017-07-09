@@ -32,7 +32,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.data.domain.Page;
 
+import com.omgcms.model.core.Role;
+import com.omgcms.service.RoleService;
+import com.omgcms.util.CmsConstants;
 import com.omgcms.util.CmsUtil;
 
 public class CommonTest {
@@ -55,6 +59,13 @@ public class CommonTest {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		System.out.println(entityManager);
 		entityManager.close();
+	}
+	
+	@Test
+	public void testJoinQuery() throws SQLException {
+		RoleService roleService = ctx.getBean(RoleService.class);
+		Page<Role> findRolesByUsers = roleService.findRolesByUserId(1, 5, "roleKey", CmsConstants.ORDER_ASC, 2059);
+		System.out.println("=====>"+findRolesByUsers.getSize());
 	}
 	
 	@Test
