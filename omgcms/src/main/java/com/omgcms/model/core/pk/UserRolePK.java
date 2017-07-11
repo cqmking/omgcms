@@ -12,7 +12,15 @@ public class UserRolePK implements Serializable {
 	private Long userId;
 
 	private Long roleId;
+
+	public UserRolePK() {
+	}
 	
+	public UserRolePK(Long userId, Long roleId) {
+		this.userId = userId;
+		this.roleId = roleId;
+	}
+
 	public Long getUserId() {
 		return userId;
 	}
@@ -20,7 +28,7 @@ public class UserRolePK implements Serializable {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-	
+
 	public Long getRoleId() {
 		return roleId;
 	}

@@ -128,21 +128,32 @@
 		
 		var dataArray = [];
 		that.getSelectRows().each(function(i, row){
-			var _id = $(this).data("id");
+			
+			//直接使用data有缓存  data("id")-
+			var _id = $(this).attr("data-id");
 			dataArray.push(_id);
 		});
 		
 		return dataArray;
     };
+    
+    CustomDatatable.prototype.clear = function() {
+		var that     = this;
+		that.$target.find("th.check-all").removeClass("checked");
+		that.$target.find("td.check-btn.checked").removeClass("checked");
+    };
+    
+    
 	
     $.fn.extend({
     	
         "customDatatable": function (options) {
         	
         	var $table = this;
+        	var _customDatatable = new CustomDatatable($table);
         	
-        	if(!options.create){
-        		return new CustomDatatable($table);
+        	if(!options || !options.create){
+        		return _customDatatable;
         	}
         	
         	$table.find("th.check-all").off().on("click", function(){
@@ -162,6 +173,7 @@
         	});
         	
         	$table.find("td.check-btn").off().on("click", function(){
+        		
         		if($(this).hasClass("checked")){
         			$(this).removeClass("checked");
         			$table.find("th.check-all.checked").removeClass("checked");
@@ -179,9 +191,7 @@
         		
         	});
         	
-        	
-        	
-        	return new CustomDatatable($table);
+        	return _customDatatable;
         }
     
     });
@@ -265,7 +275,10 @@
 
 					},
 				   complete: function (XMLHttpRequest, status) {
-					   options.complete(XMLHttpRequest, status);
+					   if(options.complete){
+						   options.complete(XMLHttpRequest, status);
+					   }
+					   
 				   }
 				});
 				

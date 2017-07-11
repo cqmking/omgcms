@@ -7,8 +7,9 @@ PLAN:
 	1.3 Search User											
 2. Role CURD
 	2.1 Role create, Role Update						OK
-	2.2 Role delete
+	2.2 Role delete										OK
 	2.3 Search Role
+	2.4 Role & User mapping								
 3. Permission CURD
 4. Role & Permission
 5. Organization CRUD

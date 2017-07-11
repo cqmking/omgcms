@@ -13,6 +13,15 @@ public class GroupRolePK implements Serializable {
 
 	private Long roleId;
 
+	public GroupRolePK() {
+		
+	}
+	
+	public GroupRolePK(Long groupId, Long roleId) {
+		this.roleId = roleId;
+		this.groupId = groupId;
+	}
+	
 	public Long getGroupId() {
 		return groupId;
 	}

@@ -23,7 +23,25 @@ public class UserRole implements Serializable {
 	private User user;
 
 	private Role role;
-
+	
+	public UserRole(){
+		
+	}
+	
+	public UserRole(UserRolePK id) {
+		this.id = id;
+	}
+	
+	public UserRole(long userId, long roleId){
+		this.id = new UserRolePK(userId, roleId);
+	}
+	
+	public UserRole(User user, Role role){
+		this(user.getUserId(),role.getRoleId());
+		this.user = user;
+		this.role = role;
+	}
+	
 	@EmbeddedId
 	public UserRolePK getId() {
 		return id;

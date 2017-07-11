@@ -2,6 +2,7 @@ package com.omgcms.web.action.api;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.codec.Base64;
@@ -18,7 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.omgcms.admin.util.Config;
+import com.omgcms.model.core.Role;
 import com.omgcms.model.core.User;
+import com.omgcms.model.core.UserRole;
+import com.omgcms.service.RoleService;
+import com.omgcms.service.UserRoleService;
 import com.omgcms.service.UserService;
 import com.omgcms.util.CmsConstants;
 import com.omgcms.util.CmsUtil;
@@ -39,6 +44,10 @@ public class UserAction {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private RoleService roleService;
+	@Autowired
+	private UserRoleService userRoleService;
 
 	@ResponseBody
 	@RequestMapping(value = "/list/page-{pageNum}/page-size-{pageSize}", method = RequestMethod.GET)
@@ -49,7 +58,7 @@ public class UserAction {
 		pageSize = ParamUtil.get(pageSize, CmsConstants.ADMIN_PAGE_SIZE);
 
 		Page<User> usersPage = userService.findUsers(pageNum, pageSize, "userId", CmsConstants.ORDER_ASC);
-		
+
 		return usersPage;
 	}
 
@@ -74,11 +83,11 @@ public class UserAction {
 	@ResponseBody
 	@RequestMapping(value = "/delete/{userId}", method = RequestMethod.DELETE)
 	public boolean deleteUser(@PathVariable(value = "userId") Integer userId) {
-		
+
 		userId = ParamUtil.get(userId, -1);
-		
+
 		userService.deleteUser(userId);
-		
+
 		return true;
 	}
 
@@ -92,11 +101,11 @@ public class UserAction {
 		}
 		String[] idsStr = userIds.split(StringPool.COMMA);
 		long[] _userIds = new long[idsStr.length];
-		
+
 		for (int i = 0; i < idsStr.length; i++) {
 			_userIds[i] = Long.valueOf(idsStr[i]);
 		}
-		
+
 		logger.debug("Will delete users with ids:{}", userIds);
 		userService.deleteUsers(_userIds);
 
@@ -125,7 +134,7 @@ public class UserAction {
 		if (user.getBirthday() == null) {
 			user.setBirthday(new GregorianCalendar(1970, 0, 1).getTime());
 		}
-		
+
 		Date now = new Date();
 		user.setCreateDate(now);
 		user.setModifyDate(now);
@@ -155,6 +164,85 @@ public class UserAction {
 		User savedUser = userService.saveAndFlush(user);
 
 		return savedUser;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/user-role-list/userid-{userId}/page-{pageNum}/page-size-{pageSize}", method = RequestMethod.GET)
+	public Page<Role> getUserRoleList(@PathVariable(value = "userId") Long userId, @PathVariable(value = "pageNum") Integer pageNum,
+			@PathVariable(value = "pageSize") Integer pageSize) {
+
+		userId = ParamUtil.get(userId, -1);
+		pageNum = ParamUtil.get(pageNum, 1);
+		pageSize = ParamUtil.get(pageSize, CmsConstants.ADMIN_PAGE_SIZE);
+
+		Page<Role> pageRoles = roleService.getRolesByUserId(pageNum, pageSize, "name", CmsConstants.ORDER_ASC, userId);
+
+		return pageRoles;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/unassigned-user-role-list/userid-{userId}/page-{pageNum}/page-size-{pageSize}", method = RequestMethod.GET)
+	public Page<Role> getUnassignedUserRoleList(@PathVariable(value = "userId") Long userId,
+			@PathVariable(value = "pageNum") Integer pageNum, @PathVariable(value = "pageSize") Integer pageSize) {
+
+		userId = ParamUtil.get(userId, -1);
+		pageNum = ParamUtil.get(pageNum, 1);
+		pageSize = ParamUtil.get(pageSize, CmsConstants.ADMIN_PAGE_SIZE);
+
+		Page<Role> pageRoles = roleService.getUnassignedUserRoles(pageNum, pageSize, "name", CmsConstants.ORDER_ASC, userId);
+
+		return pageRoles;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/remove-user-roles/userid-{userId}/{roleIds}", method = { RequestMethod.POST, RequestMethod.PUT,
+			RequestMethod.DELETE })
+	public boolean removeUserRoles(@PathVariable(value = "userId") Long userId, @PathVariable(value = "roleIds") String roleIds) {
+
+		userId = ParamUtil.get(userId, -1);
+		roleIds = ParamUtil.get(roleIds, StringPool.BLANK);
+
+		if (StringUtils.isBlank(roleIds)) {
+			return false;
+		}
+
+		String[] idsStr = roleIds.split(StringPool.COMMA);
+		long[] _roleIds = new long[idsStr.length];
+
+		for (int i = 0; i < idsStr.length; i++) {
+			_roleIds[i] = Long.valueOf(idsStr[i]);
+		}
+
+		logger.debug("Will delete roleIds with ids:{}", roleIds);
+
+		userRoleService.deleteUserRoles(userId, _roleIds);
+
+		return true;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/add-user-roles/userid-{userId}/{roleIds}", method = { RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
+	public List<UserRole> addUserRoles(@PathVariable(value = "userId") Long userId, @PathVariable(value = "roleIds") String roleIds) {
+		
+		userId = ParamUtil.get(userId, -1);
+		roleIds = ParamUtil.get(roleIds, StringPool.BLANK);
+
+		if (StringUtils.isBlank(roleIds)) {
+			return null;
+		}
+		
+		String[] idsStr = roleIds.split(StringPool.COMMA);
+		Long[] _roleIds = new Long[idsStr.length];
+
+		for (int i = 0; i < idsStr.length; i++) {
+			_roleIds[i] = Long.valueOf(idsStr[i]);
+		}
+		
+		User user = userService.getUser(userId);
+		List<Role> roles = roleService.getRolesByIds(_roleIds);
+		List<UserRole> userRoles = userRoleService.addUserRoles(user, roles);
+		
+		return userRoles;
 	}
 
 }

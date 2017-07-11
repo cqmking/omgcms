@@ -59,6 +59,7 @@ public class Role implements Serializable{
 		return name;
 	}
 
+	@Column(name = "name", unique = true, nullable = false)
 	public void setName(String name) {
 		this.name = name;
 	}

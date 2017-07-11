@@ -30,7 +30,7 @@ public class RoleAction {
 
 	@Autowired
 	private RoleService roleService;
-
+	
 	@ResponseBody
 	@RequestMapping(value = "/list/page-{pageNum}/page-size-{pageSize}", method = RequestMethod.GET)
 	public Page<Role> getRoleList(@PathVariable(value = "pageNum") Integer pageNum,
@@ -41,13 +41,11 @@ public class RoleAction {
 		pageNum = ParamUtil.get(pageNum, 1);
 		pageSize = ParamUtil.get(pageSize, CmsConstants.ADMIN_PAGE_SIZE);
 
-		Page<Role> pageRoles = roleService.findRoles(pageNum, pageSize, "roleId", CmsConstants.ORDER_ASC);
-
-		Page<Role> findRolesByUsers = roleService.findRolesByUserId(1, 5, "roleKey", CmsConstants.ORDER_ASC, 2059);
-		System.out.println("============>>>"+findRolesByUsers.getTotalElements());
+		Page<Role> pageRoles = roleService.getRoles(pageNum, pageSize, "name", CmsConstants.ORDER_ASC);
+		
 		return pageRoles;
 	}
-
+	
 	@ResponseBody
 	@RequestMapping(value = "/roleid/{roleId}", method = RequestMethod.GET)
 	public Role getRole(@PathVariable(value = "roleId") Integer roleId) {
@@ -99,7 +97,7 @@ public class RoleAction {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@RequestMapping(value = "/create", method = { RequestMethod.POST, RequestMethod.PUT })
 	public Role createRole(@RequestBody Role role) {
 
 		validateRole(role, true);
@@ -114,7 +112,7 @@ public class RoleAction {
 	}
 
 	@ResponseBody
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@RequestMapping(value = "/update", method = { RequestMethod.POST, RequestMethod.PUT })
 	public Role updateRole(@RequestBody Role role) {
 
 		validateRole(role, false);
@@ -143,7 +141,7 @@ public class RoleAction {
 			throw new CmsRuntimeException("error.form.field.required", new Object[] { CmsUtil.getLocaleMessage("label.common.name") },
 					"Role name should not be null");
 		}
-		
+
 		if (isNew) {
 
 			Role roleByRoleKey = roleService.getByRoleKey(role.getRoleKey());

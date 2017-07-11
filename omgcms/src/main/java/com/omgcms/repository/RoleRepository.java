@@ -18,4 +18,5 @@ public interface RoleRepository extends JpaSpecificationExecutor<Role>, JpaRepos
 
 	public Role getByRoleKey(String roleKey);
 	
+	
 }

@@ -64,7 +64,7 @@ public class CommonTest {
 	@Test
 	public void testJoinQuery() throws SQLException {
 		RoleService roleService = ctx.getBean(RoleService.class);
-		Page<Role> findRolesByUsers = roleService.findRolesByUserId(1, 5, "roleKey", CmsConstants.ORDER_ASC, 2059);
+		Page<Role> findRolesByUsers = roleService.getRolesByUserId(1, 5, "roleKey", CmsConstants.ORDER_ASC, 2059);
 		System.out.println("=====>"+findRolesByUsers.getSize());
 	}
 	
