@@ -19,11 +19,10 @@
 	                </ul>\
         		</div>',
         		
+        		
         data: function(){
         	
-        	
             return {
-                currentPage: parseInt(this.currentPageNum),
                 showTotal: this.showTotalCount != "false",
                 navLabels: {
                 	total:'共',
@@ -33,6 +32,10 @@
         },
 
         computed: {
+        	
+        	currentPage: function(){
+        		return parseInt(this.currentPageNum);
+        	},
         	
             pages: function(){
                 var _self = this;
@@ -83,7 +86,7 @@
         methods: {
             gotoPage: function (event, pageIndex) {
                 var _self = this;
-
+                
                 event.target.blur();
 
                 if (pageIndex <= 0){
@@ -95,9 +98,8 @@
                 if(_self.currentPage==pageIndex){
                     return;
                 }
-
-                _self.currentPage = pageIndex;
-                this.$emit('change', _self.currentPage)
+                
+                this.$emit('change', pageIndex);
             }
 
         }

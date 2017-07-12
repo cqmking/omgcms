@@ -41,4 +41,9 @@ public class RoleManageAction {
 		return "admin/role/edit_role";
 	}
 	
+	@RequestMapping("/assign_role_users.do")
+	public String assignRoleUsers(){
+		return "admin/role/assign_role_users";
+	}
+	
 }

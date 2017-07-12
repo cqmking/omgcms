@@ -57,8 +57,16 @@
 					<td>{{role.roleKey}}</td>
 					<td>{{role.description}}</td>
 					<td class="btn-td">
-						<a class="btn btn-sm" :href="'edit.do?roleId='+role.roleId"><s:message code="label.common.modify"/></a>
-						<button class="btn btn-sm btn-danger" type="button" @click.prevent="deleteObject(role)"><s:message code="label.common.delete"/></button>
+						<div class="btn-group">
+						  <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown">
+						    <s:message code="label.common.operation" /> <span class="caret"></span>
+						  </button>
+						  <ul class="dropdown-menu pull-right" role="menu">
+						    <li><a :href="'edit.do?roleId='+role.roleId"><s:message code="label.common.modify"/></a></li>
+						    <li><a href="javascript:;" @click.prevent="deleteObject(role)"><s:message code="label.common.delete"/></a></li>
+						    <li><a href="javascript:;" @click.prevent="assignUsers(role)"><s:message code="label.user.assign.roles"/></a></li>
+						  </ul>
+						</div>
 					</td>
 				</tr>
 			</tbody>
@@ -244,6 +252,10 @@ $(function(){
 				}
 				
 				
+			},
+			
+			assignUsers: function(role){
+				location.href="assign_role_users.do?roleId="+role.roleId;
 			}
 			
 			

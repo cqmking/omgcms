@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title><s:message code="label.user.assign.roles" /></title>
+<title><s:message code="label.role.assign.users" /></title>
 
 <style type="text/css">
 
@@ -246,6 +246,7 @@ $(function(){
 						self.unassignedRolePage = data;
 					}
 				});
+				
 			},
 			
 			loadAssignedRoles: function(index){
@@ -266,6 +267,7 @@ $(function(){
 						
 					}
 				});
+				
 				
 			},
 			
