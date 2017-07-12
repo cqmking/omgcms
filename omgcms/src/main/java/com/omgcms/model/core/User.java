@@ -64,9 +64,10 @@ public class User implements Serializable {
 	@JsonIgnore
 	private Set<UserGroup> userGroups;
 	
-	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", allocationSize = 1, pkColumnName = "name", pkColumnValue = "userId", valueColumnName = "value")
+	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", initialValue = 1000, allocationSize = 1, pkColumnName = "name", pkColumnValue = "userId", valueColumnName = "value")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "ID_GENERATOR")
 	@Id
+	
 	public Long getUserId() {
 		return userId;
 	}
@@ -74,8 +75,8 @@ public class User implements Serializable {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-
-	@Column(name = "user_account", unique = true, nullable = false)
+	
+	@Column(unique = true, nullable = false)
 	public String getUserAccount() {
 		return userAccount;
 	}
@@ -109,7 +110,7 @@ public class User implements Serializable {
 		this.sex = sex;
 	}
 
-	@Column(name = "email", unique = true, nullable = false)
+	@Column(unique = true, nullable = false)
 	public String getEmail() {
 		return email;
 	}

@@ -11,32 +11,32 @@ import javax.persistence.TableGenerator;
 
 @Table(name = "resourcepermission")
 @Entity
-public class ResourcePermission implements Serializable{
-	
+public class ResourcePermission implements Serializable {
+
 	private static final long serialVersionUID = -7372463086643243416L;
 
 	private Long resourcePermissionId;
-	
+
 	private Long resourceActionId;
-	
+
 	/**
 	 * Resource's PrimaryKey
 	 */
 	private Long primaryKey;
-	
+
 	private Long roleId;
-	
-	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", allocationSize = 1, pkColumnName = "name", pkColumnValue = "resourcePermissionId", valueColumnName = "value")
+
+	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", initialValue = 1000, allocationSize = 1, pkColumnName = "name", pkColumnValue = "resourcePermissionId", valueColumnName = "value")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "ID_GENERATOR")
 	@Id
 	public Long getResourcePermissionId() {
 		return resourcePermissionId;
 	}
-	
+
 	public void setResourcePermissionId(Long resourcePermissionId) {
 		this.resourcePermissionId = resourcePermissionId;
 	}
-	
+
 	public Long getResourceActionId() {
 		return resourceActionId;
 	}
@@ -60,6 +60,5 @@ public class ResourcePermission implements Serializable{
 	public void setRoleId(Long roleId) {
 		this.roleId = roleId;
 	}
-	
-	
+
 }

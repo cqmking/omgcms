@@ -53,7 +53,7 @@ public class UserRole implements Serializable {
 
 	@MapsId("userId")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "userId", nullable = false)
 	public User getUser() {
 		return user;
 	}
@@ -64,7 +64,7 @@ public class UserRole implements Serializable {
 
 	@MapsId("roleId")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "role_id", nullable = false)
+	@JoinColumn(name = "roleId", nullable = false)
 	public Role getRole() {
 		return role;
 	}

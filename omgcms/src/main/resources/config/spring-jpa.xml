@@ -12,7 +12,7 @@
 		http://www.springframework.org/schema/data/jpa
 		http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd
 		">
-
+	
 
 	<!-- 配置数据源 使用的是Druid数据源 -->
 	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
@@ -75,7 +75,7 @@
 					org.hibernate.cfg.ImprovedNamingStrategy
 				</prop>
 				<!-- hibernate 基本属性 -->
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</prop>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format_sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>

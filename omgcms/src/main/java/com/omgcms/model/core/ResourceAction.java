@@ -11,31 +11,31 @@ import javax.persistence.TableGenerator;
 
 @Table(name = "resourceaction")
 @Entity
-public class ResourceAction implements Serializable{
-	
+public class ResourceAction implements Serializable {
+
 	private static final long serialVersionUID = -7367037807272901824L;
 
 	private Long resourceActionId;
-	
+
 	/**
 	 * Resource name, may be className, custom resource id and etc.
 	 */
 	private Long resourceName;
-	
+
 	private String actionId;
-	
+
 	/**
 	 * Distinguish the system resource and Entry resource
 	 */
 	private Integer type;
 
-	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", allocationSize = 1, pkColumnName = "name", pkColumnValue = "resourceActionId", valueColumnName = "value")
+	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", initialValue = 1000, allocationSize = 1, pkColumnName = "name", pkColumnValue = "resourceActionId", valueColumnName = "value")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "ID_GENERATOR")
 	@Id
 	public Long getResourceActionId() {
 		return resourceActionId;
 	}
-	
+
 	public void setResourceActionId(Long resourceActionId) {
 		this.resourceActionId = resourceActionId;
 	}
@@ -63,5 +63,5 @@ public class ResourceAction implements Serializable{
 	public void setType(Integer type) {
 		this.type = type;
 	}
-	
+
 }

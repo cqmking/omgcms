@@ -35,7 +35,7 @@ public class GroupRole implements Serializable {
 
 	@MapsId("groupId")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="group_id", nullable = false)
+	@JoinColumn(name="groupId", nullable = false)
 	public Group getGroup() {
 		return group;
 	}
@@ -46,7 +46,7 @@ public class GroupRole implements Serializable {
 	
 	@MapsId("roleId")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="role_id", nullable = false)
+	@JoinColumn(name="roleId", nullable = false)
 	public Role getRole() {
 		return role;
 	}

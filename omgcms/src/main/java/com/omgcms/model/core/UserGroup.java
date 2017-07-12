@@ -35,7 +35,7 @@ public class UserGroup implements Serializable{
 	
 	@MapsId("userId")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="user_id", nullable = false)
+	@JoinColumn(name="userId", nullable = false)
 	public User getUser() {
 		return user;
 	}
@@ -46,7 +46,7 @@ public class UserGroup implements Serializable{
 	
 	@MapsId("groupId")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="group_id", nullable = false)
+	@JoinColumn(name="groupId", nullable = false)
 	public Group getGroup() {
 		return group;
 	}

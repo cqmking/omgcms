@@ -19,38 +19,38 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Table(name = "role_")
 @Entity
-public class Role implements Serializable{
-	
+public class Role implements Serializable {
+
 	private static final long serialVersionUID = 6824683931019456228L;
 
 	private Long roleId;
 
 	private String name;
-	
+
 	/**
 	 * 角色编码(例如 sysadmin->（对应）系统管理员)
 	 */
 	private String roleKey;
 
 	private String description;
-	
+
 	private Date createDate;
 
 	private Date modifyDate;
-	
+
 	@JsonIgnore
 	private Set<UserRole> userRoles;
-	
+
 	@JsonIgnore
 	private Set<GroupRole> groupRoles;
-	
-	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", allocationSize = 1, pkColumnName = "name", pkColumnValue = "roleId", valueColumnName = "value")
+
+	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", initialValue = 1000, allocationSize = 1, pkColumnName = "name", pkColumnValue = "roleId", valueColumnName = "value")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "ID_GENERATOR")
 	@Id
 	public Long getRoleId() {
 		return roleId;
 	}
-	
+
 	public void setRoleId(Long roleId) {
 		this.roleId = roleId;
 	}
@@ -59,12 +59,12 @@ public class Role implements Serializable{
 		return name;
 	}
 
-	@Column(name = "name", unique = true, nullable = false)
+	@Column(unique = true, nullable = false)
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	@Column(name = "roleKey", unique = true, nullable = false)
+
+	@Column(unique = true, nullable = false)
 	public String getRoleKey() {
 		return roleKey;
 	}
@@ -73,7 +73,7 @@ public class Role implements Serializable{
 		this.roleKey = roleKey;
 	}
 
-	@Column(name = "description", length = 1024)
+	@Column(length = 1024)
 	public String getDescription() {
 		return description;
 	}
@@ -81,7 +81,7 @@ public class Role implements Serializable{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -102,7 +102,7 @@ public class Role implements Serializable{
 	public Set<UserRole> getUserRoles() {
 		return userRoles;
 	}
-	
+
 	public void setUserRoles(Set<UserRole> userRoles) {
 		this.userRoles = userRoles;
 	}
@@ -115,5 +115,5 @@ public class Role implements Serializable{
 	public void setGroupRoles(Set<GroupRole> groupRoles) {
 		this.groupRoles = groupRoles;
 	}
-	
+
 }
