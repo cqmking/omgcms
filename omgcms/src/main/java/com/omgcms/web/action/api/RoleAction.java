@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.omgcms.exception.CmsRuntimeException;
 import com.omgcms.model.core.Role;
+import com.omgcms.model.core.User;
 import com.omgcms.service.RoleService;
+import com.omgcms.service.UserRoleService;
+import com.omgcms.service.UserService;
 import com.omgcms.util.CmsConstants;
 import com.omgcms.util.CmsUtil;
 import com.omgcms.util.StringPool;
@@ -29,8 +32,12 @@ public class RoleAction {
 	private Logger logger = LoggerFactory.getLogger(RoleAction.class);
 
 	@Autowired
+	private UserService userService;
+	@Autowired
 	private RoleService roleService;
-	
+	@Autowired
+	private UserRoleService userRoleService;
+
 	@ResponseBody
 	@RequestMapping(value = "/list/page-{pageNum}/page-size-{pageSize}", method = RequestMethod.GET)
 	public Page<Role> getRoleList(@PathVariable(value = "pageNum") Integer pageNum,
@@ -42,10 +49,10 @@ public class RoleAction {
 		pageSize = ParamUtil.get(pageSize, CmsConstants.ADMIN_PAGE_SIZE);
 
 		Page<Role> pageRoles = roleService.getRoles(pageNum, pageSize, "name", CmsConstants.ORDER_ASC);
-		
+
 		return pageRoles;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/roleid/{roleId}", method = RequestMethod.GET)
 	public Role getRole(@PathVariable(value = "roleId") Integer roleId) {
@@ -128,6 +135,34 @@ public class RoleAction {
 		Role _role = roleService.saveAndFlush(savedRole);
 
 		return _role;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/unassigned-user-list/roleid-{roleId}/page-{pageNum}/page-size-{pageSize}", method = RequestMethod.GET)
+	public Page<User> getUnassignedUserList(@PathVariable(value = "roleId") Long roleId,
+			@PathVariable(value = "pageNum") Integer pageNum, @PathVariable(value = "pageSize") Integer pageSize) {
+
+		roleId = ParamUtil.get(roleId, -1);
+		pageNum = ParamUtil.get(pageNum, 1);
+		pageSize = ParamUtil.get(pageSize, CmsConstants.ADMIN_PAGE_SIZE);
+
+		Page<User> pageRoles = userService.getUnassignedRoleUsers(pageNum, pageSize, "userName", CmsConstants.ORDER_ASC, roleId);
+
+		return pageRoles;
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/assigned-user-list/roleid-{roleId}/page-{pageNum}/page-size-{pageSize}", method = RequestMethod.GET)
+	public Page<User> getAssignedUserList(@PathVariable(value = "roleId") Long roleId,
+			@PathVariable(value = "pageNum") Integer pageNum, @PathVariable(value = "pageSize") Integer pageSize) {
+
+		roleId = ParamUtil.get(roleId, -1);
+		pageNum = ParamUtil.get(pageNum, 1);
+		pageSize = ParamUtil.get(pageSize, CmsConstants.ADMIN_PAGE_SIZE);
+
+		Page<User> pageRoles = userService.getUsersByRoleId(pageNum, pageSize, "userName", CmsConstants.ORDER_ASC, roleId);
+
+		return pageRoles;
 	}
 
 	private boolean validateRole(Role role, boolean isNew) {

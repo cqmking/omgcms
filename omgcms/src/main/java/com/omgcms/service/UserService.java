@@ -19,5 +19,9 @@ public interface UserService {
 	User getUser(long userId);
 
 	Page<User> findUsers(int pageNo, int pageSize, String orderByProperty, String sortType);
+	
+	Page<User> getUsersByRoleId(int pageNo, int pageSize, String orderByProperty, String sortType, long roleId);
+	
+	Page<User> getUnassignedRoleUsers(int pageNo, int pageSize, String orderByProperty, String sortType, long roleId);
 
 }

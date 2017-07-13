@@ -250,6 +250,7 @@
 			sendJsonRequest: function(options){
 				
 				var instance = this;
+				var $container = instance._showSpinning(options.errorMsgContainer);
 				
 				$.ajax({
 				   type: options.method,
@@ -268,9 +269,9 @@
 						if (XMLHttpRequest.responseJSON) {
 							var errorMsg = XMLHttpRequest.responseJSON.message;
 							if(options.prependError==true){
-								instance.showErrorMessage(errorMsg, options.errorMsgContainer, options.prependError);
+								instance.showErrorMessage(errorMsg, $container, options.prependError);
 							}else{
-								instance.showErrorMessage(errorMsg, options.errorMsgContainer);
+								instance.showErrorMessage(errorMsg, $container);
 							}
 							
 						}
@@ -280,11 +281,57 @@
 					   if(options.complete){
 						   options.complete(XMLHttpRequest, status);
 					   }
-					   
+					   console.log("complete");
+					   instance._stopSpinning($container);
 				   }
 				});
 				
+			},
+			
+			_showSpinning: function($container){
+				var _container;
+				if($container){
+					_container = $container
+				}else{
+					_container = $(".section-content");
+					if(_container){
+						;
+					}else{
+						_container = $("#page-content");
+					}
+					if(_container){
+						;
+					}else{
+						_container = $("body");
+					}
+				}
+				
+				var $spinDiv = $('<div class="cms-spinning loading-div"><i class="icon icon-spin icon-spinner-indicator"></i></div>');
+				$spinDiv.hide();	//暂时不显示
+				_container.addClass("load");
+				_container.after($spinDiv);
+				
+				// 300 毫秒后显示，如果客户端Ajax加载数据低于300毫秒可立即刷新
+				setTimeout(function(){
+					if(_container.hasClass("load")){
+						_container.hide();
+						$spinDiv.show();
+					}
+				}, 100);
+				
+				return _container;
+				
+			},
+			
+			_stopSpinning: function($container){
+				if($container){
+					$container.removeClass("load");
+					$container.show();
+					$container.next(".cms-spinning").remove();
+				}
 			}
+			
+			
 			
 		},
 		

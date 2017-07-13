@@ -11,7 +11,7 @@
 <body>
 <div id="page-content">
 	
-	<section class="content-header" v-show="!loading" style="display: none;">
+	<section class="content-header">
 		<ol class="breadcrumb">
 			<li>
 				<a href="${basePath}/admin/index.do"><s:message code="label.common.home" /></a>
@@ -89,7 +89,7 @@ $(function(){
 		el: '#page-content',
 		
 		data: {
-			loading: true,
+			loading: false,
 			showBatchDelete: false,
 			pageInfo:{
 				content:[],
@@ -100,7 +100,7 @@ $(function(){
 			pageSize: 10
 		},
 		
-		created: function () {
+		mounted: function () {
 			var self = this;
 			self.initPage();
 		},
@@ -126,7 +126,6 @@ $(function(){
 			goToPage: function(index){
 				
 				var self = this;
-				self.loading = true;
 				
 				var getListUrl = "${basePath}/api/rest/role/list/page-" + index + "/page-size-"+self.pageSize;
 				
@@ -137,17 +136,14 @@ $(function(){
 					prependError: false,
 					success: function(data){
 						self.pageInfo = data;
-					},
-					complete: function(){
-						self.loading = false;
 					}
+				
 				});
 				
 			},
 			
 			getRemotePageData: function(){
 				var self = this;
-				self.loading = true;
 				
 				var getListUrl = "${basePath}/api/rest/role/list/page-"+(self.pageInfo.number+1)+"/page-size-"+self.pageSize;
 
@@ -158,10 +154,8 @@ $(function(){
 					prependError: false,
 					success: function(data){
 						self.pageInfo = data;
-					},
-					complete: function(){
-						self.loading = false;
 					}
+				
 				});
 				
 			},
@@ -204,10 +198,8 @@ $(function(){
 						prependError: true,
 						success: function(data){
 							location.href="list.do?messageCode=message.delete.success&noteType=success";
-						},
-						complete: function(){
-							self.loading = false;
 						}
+					
 					});
 				}
 			},
@@ -244,10 +236,8 @@ $(function(){
 						prependError: true,
 						success: function(data){
 							location.href="list.do?messageCode=message.delete.success&noteType=success";
-						},
-						complete: function(){
-							self.loading = false;
 						}
+					
 					});
 				}
 				

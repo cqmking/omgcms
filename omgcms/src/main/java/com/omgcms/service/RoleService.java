@@ -38,4 +38,5 @@ public interface RoleService {
 	 */
 	Page<Role> getUnassignedUserRoles(int pageNo, int pageSize, String orderByProperty, String sortType, long userId);
 	
+	
 }

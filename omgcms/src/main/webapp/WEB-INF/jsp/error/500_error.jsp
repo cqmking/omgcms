@@ -11,6 +11,9 @@
 	
 	<% Exception ex = (Exception)request.getAttribute("exception"); %>
 	<%
+	
+		out.print(request.getAttributeNames());
+		
 		if(ex==null){
 			out.println("No exception!");
 			return;

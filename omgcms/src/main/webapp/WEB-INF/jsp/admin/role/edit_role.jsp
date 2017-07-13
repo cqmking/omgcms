@@ -46,7 +46,7 @@ input.normal {
 
 <div id="page-content">
 	
-	<section class="content-header" v-show="!loading">
+	<section class="content-header">
 		<ol class="breadcrumb">
 			<li>
 				<a href="${basePath}/admin/index.do"><s:message code="label.common.home" /></a>
@@ -114,7 +114,7 @@ $(function(){
 		el: '#page-content',
 		
 		data: {
-			loading: true,
+			loading: false,
 			roleId: '${roleId}',
 			role: {}
 		},
@@ -134,11 +134,9 @@ $(function(){
 			getRemotePageData: function(){
 				var self = this;
 				if(self.roleId==null || $.trim(self.roleId).length==0){
-					self.loading = false;
 					return;
 				}
 				
-				self.loading = true;
 				
 				CMS.Util.sendJsonRequest({
 					url: "${basePath}/api/rest/role/roleid/"+self.roleId,
@@ -147,9 +145,6 @@ $(function(){
 					errorMsgContainer: $(".section-content"),
 					success: function(data){
 						self.role = data;
-					},
-					complete: function(){
-						self.loading = false;
 					}
 				});
 				
@@ -182,9 +177,6 @@ $(function(){
 						}else{
 							location.href="list.do?messageCode=message.create.success&noteType=success";
 						}
-					},
-					complete: function(){
-						self.loading = false;
 					}
 				});
 			},

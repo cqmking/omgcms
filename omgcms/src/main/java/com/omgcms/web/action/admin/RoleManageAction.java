@@ -42,7 +42,11 @@ public class RoleManageAction {
 	}
 	
 	@RequestMapping("/assign_role_users.do")
-	public String assignRoleUsers(){
+	public String assignRoleUsers(Model model, @RequestParam(value = "roleId") Long roleId){
+		
+		roleId = ParamUtil.get(roleId, -1);
+		model.addAttribute("roleId", roleId);
+		
 		return "admin/role/assign_role_users";
 	}
 	

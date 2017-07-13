@@ -48,11 +48,7 @@ input.normal {
 
 <div id="page-content">
 	
-	<div class="loading-div" v-show="loading">
-		<i class="icon icon-spin icon-spinner-indicator"></i>
-	 </div>
-	
-	<section class="content-header" v-show="!loading">
+	<section class="content-header">
 		<ol class="breadcrumb">
 			<li>
 				<a href="${basePath}/admin/index.do"><s:message code="label.common.home" /></a>
@@ -189,7 +185,7 @@ $(function(){
 		el: '#page-content',
 		
 		data: {
-			loading: true,
+			loading: false,
 			formstate: {},
 			userId: '${userId}',
 			user: {},
@@ -235,11 +231,8 @@ $(function(){
 			getRemotePageData: function(){
 				var self = this;
 				if(self.userId==null || $.trim(self.userId).length==0){
-					self.loading = false;
 					return;
 				}
-				
-				self.loading = true;
 				
 				CMS.Util.sendJsonRequest({
 					url: "${basePath}/api/rest/user/userid/"+self.userId,
@@ -250,10 +243,8 @@ $(function(){
 						self.user = data;
 						$(".form-date.birthday").val(self.user.birthday);
 						$(".form-date.birthday").datetimepicker("update");
-					},
-					complete: function(){
-						self.loading = false;
 					}
+					
 				});
 				
 			},
@@ -293,7 +284,6 @@ $(function(){
 					complete: function(){
 						self.newPassword1='';
 						self.newPassword2='';
-						self.loading = false;
 					}
 				});
 			},

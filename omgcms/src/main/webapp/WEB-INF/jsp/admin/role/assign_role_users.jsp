@@ -24,16 +24,16 @@
 
 <div id="page-content">
 	
-	<section class="content-header" v-show="!loading" style="display: none;">
+	<section class="content-header">
 		<ol class="breadcrumb">
 			<li>
 				<a href="${basePath}/admin/index.do"><s:message code="label.common.home" /></a>
 			</li>
 			<li>
-				<a href="${basePath}/admin/user/index.do"><s:message code="label.user.management" /></a>
+				<a href="${basePath}/admin/role/index.do"><s:message code="label.role.management" /></a>
 			</li>
 			<li class="active">
-				<s:message code="label.user.assign.roles" />
+				<s:message code="label.role.assign.users" />
 			</li>
 		</ol>
 	</section>
@@ -50,27 +50,27 @@
 		<div class="tab-content">
 			<div class="tab-pane active" id="tabContent1">
 				<div class="tab-content" v-show="!isNoAssign">
-					<button :class="['btn btn-primary', {'disabled': !isSelectedAssign}]" type="button" @click.prevent="unassignRoles">移除所选角色</button>
+					<button :class="['btn btn-primary', {'disabled': !isSelectedAssign}]" type="button" @click.prevent="unassignRoles">移除所选用户</button>
 					<table class="table table-bordered datatable table-hover">
 						<thead>
 							<tr>
 								<th data-index="check" class="check-all check-btn"><i class="icon-check-empty"></i></th>
 								<th style="width: 100px;"><s:message code="label.common.id" /></th>
-								<th style="width: 220px;"><s:message code="label.common.code" /></th>
-								<th><s:message code="label.common.name" /></th>
+								<th style="width: 220px;"><s:message code="label.user.account" /></th>
+								<th><s:message code="label.user.username" /></th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="(role, index) in assignedRolePage.content">
-								<td data-index="check" :data-id="role.roleId" class="check-row check-btn"><i class="icon-check-empty"></i></td>
-								<td>{{role.roleId}}</td>
-								<td>{{role.roleKey}}</td>
-								<td>{{role.name}}</td>
+							<tr v-for="(user, index) in assignedUserPage.content">
+								<td data-index="check" :data-id="user.userId" class="check-row check-btn"><i class="icon-check-empty"></i></td>
+								<td>{{user.userId}}</td>
+								<td>{{user.userAccount}}</td>
+								<td>{{user.userName}}</td>
 							</tr>
 						</tbody>
 					</table>
-					<cms-pagination :total-pages-num="assignedRolePage.totalPages" show-pages="5" show-total-count="false" 
-						:current-page-num="assignedRolePage.number+1" @change="goToAssignedPage"/>
+					<cms-pagination :total-pages-num="assignedUserPage.totalPages" show-pages="5" show-total-count="false" 
+						:current-page-num="assignedUserPage.number+1" @change="goToAssignedPage"/>
 				</div>
 				
 				
@@ -78,29 +78,29 @@
 			</div>
 			<div class="tab-pane" id="tabContent2">
 				<div class="tab-content" v-show="!isNoUnassign">
-					<button :class="['btn btn-primary', {'disabled': !isSelectedUnassign}]" type="button" @click.prevent="assignRoles">分配所选角色</button>
+					<button :class="['btn btn-primary', {'disabled': !isSelectedUnassign}]" type="button" @click.prevent="assignRoles">分配所选用户</button>
 					<table class="table table-bordered datatable table-hover">
 						<thead>
 							<tr>
 								<th data-index="check" class="check-all check-btn"><i class="icon-check-empty"></i></th>
 								<th style="width: 100px;"><s:message code="label.common.id" /></th>
-								<th style="width: 220px;"><s:message code="label.common.code" /></th>
-								<th><s:message code="label.common.name" /></th>
+								<th style="width: 220px;"><s:message code="label.user.account" /></th>
+								<th><s:message code="label.user.username" /></th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="(role, index) in unassignedRolePage.content">
-								<td data-index="check" :data-id="role.roleId" class="check-row check-btn"><i class="icon-check-empty"></i></td>
-								<td>{{role.roleId}}</td>
-								<td>{{role.roleKey}}</td>
-								<td>{{role.name}}</td>
+							<tr v-for="(user, index) in unassignedUserPage.content">
+								<td data-index="check" :data-id="user.userId" class="check-row check-btn"><i class="icon-check-empty"></i></td>
+								<td>{{user.userId}}</td>
+								<td>{{user.userAccount}}</td>
+								<td>{{user.userName}}</td>
 							</tr>
 						</tbody>
 					</table>
-					<cms-pagination :total-pages-num="unassignedRolePage.totalPages" show-pages="5" show-total-count="false" 
-						:current-page-num="unassignedRolePage.number+1" @change="goToUnassignedPage"/>
+					<cms-pagination :total-pages-num="unassignedUserPage.totalPages" show-pages="5" show-total-count="false" 
+						:current-page-num="unassignedUserPage.number+1" @change="goToUnassignedPage"/>
 				</div>
-				<div v-show="isNoUnassign">没有可用的角色</div>
+				<div v-show="isNoUnassign">没有可分配的用户</div>
 			</div>
 		</div>
 	</section>
@@ -115,14 +115,14 @@ $(function(){
 		el: '#page-content',
 		
 		data: {
-			loading: true,
-			assignedRolePage: {
+			loading: false,
+			assignedUserPage: {
 				content:[],
 				totalPages: 0,
 				totalElements: 0,
 				number: 0
 			},
-			unassignedRolePage: {
+			unassignedUserPage: {
 				content:[],
 				totalPages: 0,
 				totalElements: 0,
@@ -130,20 +130,20 @@ $(function(){
 			},
 			isSelectedAssign: false,
 			isSelectedUnassign: false,
-			currentUser: {},
+			currentRole: {},
 			pageSize: 20,
-			userId: ${userId}
+			roleId: ${roleId}
 			
 		},
 		
 		computed: {
 			isNoAssign: function(){
 				var self = this;
-				return self.assignedRolePage.content.length == 0;
+				return self.assignedUserPage.content.length == 0;
 			},
 			isNoUnassign: function(){
 				var self = this;
-				return self.unassignedRolePage.content.length == 0;
+				return self.unassignedUserPage.content.length == 0;
 			}
 		},
 	
@@ -177,7 +177,6 @@ $(function(){
 		
 		mounted: function(){
 			var self = this;
-			self.loading = false;
 			self.init();
 		},
 		
@@ -186,22 +185,22 @@ $(function(){
 			init: function(){
 				var self = this;
 				self._loadUser();
-				self.loadAssignedRoles(1);
+				self.loadAssignedUsers(1);
 			},
 			
 			_loadUser: function(){
 				var self = this;
-				if(!self.userId){
-					console.warn("self.userid is invalid");
+				if(!self.roleId){
+					console.warn("self.roleId is invalid");
 					return;
 				}
 				CMS.Util.sendJsonRequest({
-					url: "${basePath}/api/rest/user/userid/"+self.userId,
+					url: "${basePath}/api/rest/role/roleid/"+self.roleId,
 					method: "GET",
 					params: "",
 					errorMsgContainer: $(".section-content"),
 					success: function(data){
-						self.currentUser = data;
+						self.currentRole = data;
 					}
 				});
 				
@@ -209,33 +208,33 @@ $(function(){
 			
 			goToAssignedPage: function(index){
 				var self = this;
-				self.loadAssignedRoles(index);	
+				self.loadAssignedUsers(index);	
 			},
 			
 			goToUnassignedPage: function(index){
 				var self = this;
-				self.loadUnassignedRoles(index);	
+				self.loadUnassignedUsers(index);	
 			},
 			
 			showTabOne: function(){
 				var self = this;
 				//The 1st page as default
-				self.loadAssignedRoles(1);		
+				self.loadAssignedUsers(1);		
 			},
 			
 			showTabTwo: function(){
 				var self = this;
 				//The 1st page as default
-				self.loadUnassignedRoles(1); 	
+				self.loadUnassignedUsers(1); 	
 			},
 			
-			loadUnassignedRoles: function(index){
+			loadUnassignedUsers: function(index){
 				
 				var self = this;
-				if(!self.userId){
+				if(!self.roleId){
 					return;
 				}
-				var url = "${basePath}/api/rest/user/unassigned-user-role-list/userid-" + self.userId + "/page-" + index + "/page-size-"+self.pageSize;
+				var url = "${basePath}/api/rest/role/unassigned-user-list/roleid-" + self.roleId + "/page-" + index + "/page-size-"+self.pageSize;
 				
 				CMS.Util.sendJsonRequest({
 					url: url,
@@ -243,19 +242,19 @@ $(function(){
 					errorMsgContainer: $(".section-content"),
 					prependError: false,
 					success: function(data){
-						self.unassignedRolePage = data;
+						self.unassignedUserPage = data;
 					}
 				});
 				
 			},
 			
-			loadAssignedRoles: function(index){
+			loadAssignedUsers: function(index){
 				
 				var self = this;
-				if(!self.userId){
+				if(!self.roleId){
 					return;
 				}
-				var url = "${basePath}/api/rest/user/user-role-list/userid-" + self.userId + "/page-" + index + "/page-size-"+self.pageSize;
+				var url = "${basePath}/api/rest/role/assigned-user-list/roleid-" + self.roleId + "/page-" + index + "/page-size-"+self.pageSize;
 				
 				CMS.Util.sendJsonRequest({
 					url: url,
@@ -263,7 +262,7 @@ $(function(){
 					errorMsgContainer: $(".section-content"),
 					prependError: false,
 					success: function(data){
-						self.assignedRolePage = data;
+						self.assignedUserPage = data;
 						
 					}
 				});
@@ -283,7 +282,7 @@ $(function(){
 				
 				var _removeRolesFromUser = function(){
 					
-					var _url = "${basePath}/api/rest/user/remove-user-roles/userid-" + self.userId + "/" + selectedIds.join(",");
+					var _url = "${basePath}/api/rest/user/remove-user-roles/userid-" + self.roleId + "/" + selectedIds.join(",");
 					
 					CMS.Util.sendJsonRequest({
 						url: _url,
@@ -292,7 +291,7 @@ $(function(){
 						prependError: true,
 						success: function(data){
 							CMS.Util.showNoticeMessage("success", "移除成功!");
-							self.loadAssignedRoles(1);
+							self.loadAssignedUsers(1);
 							$("#tabContent1 table.datatable").customDatatable().clear();
 							self.isSelectedAssign = false;
 						},
@@ -335,7 +334,7 @@ $(function(){
 				}
 				
 					
-				var _url = "${basePath}/api/rest/user/add-user-roles/userid-" + self.userId + "/" + selectedIds.join(",");
+				var _url = "${basePath}/api/rest/user/add-user-roles/userid-" + self.roleId + "/" + selectedIds.join(",");
 				
 				CMS.Util.sendJsonRequest({
 					url: _url,
@@ -344,7 +343,7 @@ $(function(){
 					prependError: true,
 					success: function(data){
 						CMS.Util.showNoticeMessage("success", "添加成功!");
-						self.loadUnassignedRoles(1);
+						self.loadUnassignedUsers(1);
 						$("#tabContent2 table.datatable").customDatatable().clear();
 						self.isSelectedUnassign = false;
 					},

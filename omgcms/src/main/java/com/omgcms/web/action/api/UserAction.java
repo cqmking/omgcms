@@ -176,7 +176,7 @@ public class UserAction {
 		pageSize = ParamUtil.get(pageSize, CmsConstants.ADMIN_PAGE_SIZE);
 
 		Page<Role> pageRoles = roleService.getRolesByUserId(pageNum, pageSize, "name", CmsConstants.ORDER_ASC, userId);
-
+		
 		return pageRoles;
 	}
 

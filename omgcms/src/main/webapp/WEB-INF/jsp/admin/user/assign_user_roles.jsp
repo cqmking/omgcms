@@ -24,7 +24,7 @@
 
 <div id="page-content">
 	
-	<section class="content-header" v-show="!loading" style="display: none;">
+	<section class="content-header">
 		<ol class="breadcrumb">
 			<li>
 				<a href="${basePath}/admin/index.do"><s:message code="label.common.home" /></a>
@@ -115,7 +115,7 @@ $(function(){
 		el: '#page-content',
 		
 		data: {
-			loading: true,
+			loading: false,
 			assignedRolePage: {
 				content:[],
 				totalPages: 0,
@@ -177,7 +177,6 @@ $(function(){
 		
 		mounted: function(){
 			var self = this;
-			self.loading = false;
 			self.init();
 		},
 		
