@@ -1,6 +1,7 @@
 package com.omgcms.web.action.api;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.omgcms.exception.CmsRuntimeException;
 import com.omgcms.model.core.Role;
 import com.omgcms.model.core.User;
+import com.omgcms.model.core.UserRole;
 import com.omgcms.service.RoleService;
 import com.omgcms.service.UserRoleService;
 import com.omgcms.service.UserService;
@@ -165,6 +167,56 @@ public class RoleAction {
 		return pageRoles;
 	}
 
+	@ResponseBody
+	@RequestMapping(value = "/add-role-users/roleid-{roleId}/{userIds}", method = { RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
+	public List<UserRole> addRoleUsers(@PathVariable(value = "roleId") Long roleId, @PathVariable(value = "userIds") String userIds) {
+		
+		roleId = ParamUtil.get(roleId, -1);
+		userIds = ParamUtil.get(userIds, StringPool.BLANK);
+
+		if (StringUtils.isBlank(userIds)) {
+			return null;
+		}
+		
+		String[] idsStr = userIds.split(StringPool.COMMA);
+		Long[] _userIds = new Long[idsStr.length];
+
+		for (int i = 0; i < idsStr.length; i++) {
+			_userIds[i] = Long.valueOf(idsStr[i]);
+		}
+		
+		Role role = roleService.getByRoleId(roleId);
+		List<User> users = userService.getUsersByIds(_userIds);
+		List<UserRole> userRoles = userRoleService.addUserRoles(role, users);
+		
+		return userRoles;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/remove-role-users/roleid-{roleId}/{userIds}", method = { RequestMethod.POST, RequestMethod.PUT,
+			RequestMethod.DELETE })
+	public boolean removeUserRoles(@PathVariable(value = "roleId") Long roleId, @PathVariable(value = "userIds") String userIds) {
+
+		roleId = ParamUtil.get(roleId, -1);
+		userIds = ParamUtil.get(userIds, StringPool.BLANK);
+
+		if (StringUtils.isBlank(userIds)) {
+			return false;
+		}
+
+		String[] idsStr = userIds.split(StringPool.COMMA);
+		long[] _userIds = new long[idsStr.length];
+
+		for (int i = 0; i < idsStr.length; i++) {
+			_userIds[i] = Long.valueOf(idsStr[i]);
+		}
+		
+		userRoleService.deleteUserRoles(_userIds, roleId);
+		
+		return true;
+	}
+	
+	
 	private boolean validateRole(Role role, boolean isNew) {
 
 		if (StringUtils.isBlank(role.getRoleKey())) {

@@ -41,16 +41,17 @@
 	<section class="section-content" v-show="!loading" style="display: none;">
 		<ul class="nav nav-tabs">
 			<li class="active">
-				<a data-tab href="#tabContent1" @click="showTabOne">已分配</a>
+				<a data-tab href="#tabContent1" @click="showTabOne"><s:message code="label.common.assigned"/></a>
 			</li>
 			<li>
-				<a data-tab href="#tabContent2" @click="showTabTwo">可用的</a>
+				<a data-tab href="#tabContent2" @click="showTabTwo"><s:message code="label.common.available"/></a>
 			</li>
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane active" id="tabContent1">
 				<div class="tab-content" v-show="!isNoAssign">
-					<button :class="['btn btn-primary', {'disabled': !isSelectedAssign}]" type="button" @click.prevent="unassignRoles">移除所选角色</button>
+					<button :class="['btn btn-primary', {'disabled': !isSelectedAssign}]" type="button" 
+						@click.prevent="unassignRoles"><s:message code="label.common.remove.select.roles"/></button>
 					<table class="table table-bordered datatable table-hover">
 						<thead>
 							<tr>
@@ -74,11 +75,12 @@
 				</div>
 				
 				
-				<div v-show="isNoAssign">未分配角色</div>
+				<div v-show="isNoAssign"><s:message code="label.common.not.assign.roles" /></div>
 			</div>
 			<div class="tab-pane" id="tabContent2">
 				<div class="tab-content" v-show="!isNoUnassign">
-					<button :class="['btn btn-primary', {'disabled': !isSelectedUnassign}]" type="button" @click.prevent="assignRoles">分配所选角色</button>
+					<button :class="['btn btn-primary', {'disabled': !isSelectedUnassign}]" type="button" 
+						@click.prevent="assignRoles"><s:message code="label.common.assign.select.roles"/></button>
 					<table class="table table-bordered datatable table-hover">
 						<thead>
 							<tr>
@@ -100,7 +102,7 @@
 					<cms-pagination :total-pages-num="unassignedRolePage.totalPages" show-pages="5" show-total-count="false" 
 						:current-page-num="unassignedRolePage.number+1" @change="goToUnassignedPage"/>
 				</div>
-				<div v-show="isNoUnassign">没有可用的角色</div>
+				<div v-show="isNoUnassign"><s:message code="label.common.no.available.roles" /></div>
 			</div>
 		</div>
 	</section>
@@ -288,7 +290,7 @@ $(function(){
 						errorMsgContainer: $(".section-content"),
 						prependError: true,
 						success: function(data){
-							CMS.Util.showNoticeMessage("success", "移除成功!");
+							CMS.Util.showNoticeMessage("success", "${cmsUtil.getLocaleMessage('label.common.remove.success')}");
 							self.loadAssignedRoles(1);
 							$("#tabContent1 table.datatable").customDatatable().clear();
 							self.isSelectedAssign = false;
@@ -302,7 +304,7 @@ $(function(){
 				
 				var dialog = CMS.Dialog.show({
 					title: '${cmsUtil.getLocaleMessage("label.common.notice")}',
-					custom: '${cmsUtil.getLocaleMessage("label.common.delete.confirm")}',
+					custom: '${cmsUtil.getLocaleMessage("label.common.remove.confirm")}',
 					toolbar: [{
 						label: '${cmsUtil.getLocaleMessage("label.common.ok")}',
 						cssClass: 'btn-primary',
@@ -340,7 +342,7 @@ $(function(){
 					errorMsgContainer: $(".section-content"),
 					prependError: true,
 					success: function(data){
-						CMS.Util.showNoticeMessage("success", "添加成功!");
+						CMS.Util.showNoticeMessage("success", "${cmsUtil.getLocaleMessage('label.common.add.success')}");
 						self.loadUnassignedRoles(1);
 						$("#tabContent2 table.datatable").customDatatable().clear();
 						self.isSelectedUnassign = false;

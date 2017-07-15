@@ -238,6 +238,10 @@
 				}
 			},
 			
+			removeErrorMessage: function(){
+				$("div.alert.custom-error-msg").remove();
+			},
+			
 			formatDate: function(dateTimeStamp, formatString){
 				if(dateTimeStamp==null){
 					return '';
@@ -250,6 +254,9 @@
 			sendJsonRequest: function(options){
 				
 				var instance = this;
+				
+				instance.removeErrorMessage();
+				
 				var $container = instance._showSpinning(options.errorMsgContainer);
 				
 				$.ajax({

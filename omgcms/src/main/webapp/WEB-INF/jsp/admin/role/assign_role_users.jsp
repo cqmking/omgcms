@@ -41,16 +41,17 @@
 	<section class="section-content" v-show="!loading" style="display: none;">
 		<ul class="nav nav-tabs">
 			<li class="active">
-				<a data-tab href="#tabContent1" @click="showTabOne">已分配</a>
+				<a data-tab href="#tabContent1" @click="showTabOne"><s:message code="label.common.assigned"/></a>
 			</li>
 			<li>
-				<a data-tab href="#tabContent2" @click="showTabTwo">可用的</a>
+				<a data-tab href="#tabContent2" @click="showTabTwo"><s:message code="label.common.available"/></a>
 			</li>
 		</ul>
 		<div class="tab-content">
 			<div class="tab-pane active" id="tabContent1">
 				<div class="tab-content" v-show="!isNoAssign">
-					<button :class="['btn btn-primary', {'disabled': !isSelectedAssign}]" type="button" @click.prevent="unassignRoles">移除所选用户</button>
+					<button :class="['btn btn-primary', {'disabled': !isSelectedAssign}]" type="button" 
+						@click.prevent="unassignRoles"><s:message code="label.common.remove.select.users"/></button>
 					<table class="table table-bordered datatable table-hover">
 						<thead>
 							<tr>
@@ -74,11 +75,12 @@
 				</div>
 				
 				
-				<div v-show="isNoAssign">未分配角色</div>
+				<div v-show="isNoAssign"><s:message code="label.common.not.assign.users" /></div>
 			</div>
 			<div class="tab-pane" id="tabContent2">
 				<div class="tab-content" v-show="!isNoUnassign">
-					<button :class="['btn btn-primary', {'disabled': !isSelectedUnassign}]" type="button" @click.prevent="assignRoles">分配所选用户</button>
+					<button :class="['btn btn-primary', {'disabled': !isSelectedUnassign}]" type="button" 
+						@click.prevent="assignRoles"><s:message code="label.common.assign.select.users"/></button>
 					<table class="table table-bordered datatable table-hover">
 						<thead>
 							<tr>
@@ -100,7 +102,7 @@
 					<cms-pagination :total-pages-num="unassignedUserPage.totalPages" show-pages="5" show-total-count="false" 
 						:current-page-num="unassignedUserPage.number+1" @change="goToUnassignedPage"/>
 				</div>
-				<div v-show="isNoUnassign">没有可分配的用户</div>
+				<div v-show="isNoUnassign"><s:message code="label.common.no.available.users" /></div>
 			</div>
 		</div>
 	</section>
@@ -282,7 +284,7 @@ $(function(){
 				
 				var _removeRolesFromUser = function(){
 					
-					var _url = "${basePath}/api/rest/user/remove-user-roles/userid-" + self.roleId + "/" + selectedIds.join(",");
+					var _url = "${basePath}/api/rest/role/remove-role-users/roleid-" + self.roleId + "/" + selectedIds.join(",");
 					
 					CMS.Util.sendJsonRequest({
 						url: _url,
@@ -290,7 +292,7 @@ $(function(){
 						errorMsgContainer: $(".section-content"),
 						prependError: true,
 						success: function(data){
-							CMS.Util.showNoticeMessage("success", "移除成功!");
+							CMS.Util.showNoticeMessage('success', '${cmsUtil.getLocaleMessage("label.common.remove.success")}');
 							self.loadAssignedUsers(1);
 							$("#tabContent1 table.datatable").customDatatable().clear();
 							self.isSelectedAssign = false;
@@ -304,7 +306,7 @@ $(function(){
 				
 				var dialog = CMS.Dialog.show({
 					title: '${cmsUtil.getLocaleMessage("label.common.notice")}',
-					custom: '${cmsUtil.getLocaleMessage("label.common.delete.confirm")}',
+					custom: '${cmsUtil.getLocaleMessage("label.common.remove.confirm")}',
 					toolbar: [{
 						label: '${cmsUtil.getLocaleMessage("label.common.ok")}',
 						cssClass: 'btn-primary',
@@ -334,7 +336,7 @@ $(function(){
 				}
 				
 					
-				var _url = "${basePath}/api/rest/user/add-user-roles/userid-" + self.roleId + "/" + selectedIds.join(",");
+				var _url = "${basePath}/api/rest/role/add-role-users/roleid-" + self.roleId + "/" + selectedIds.join(",");
 				
 				CMS.Util.sendJsonRequest({
 					url: _url,
@@ -342,7 +344,7 @@ $(function(){
 					errorMsgContainer: $(".section-content"),
 					prependError: true,
 					success: function(data){
-						CMS.Util.showNoticeMessage("success", "添加成功!");
+						CMS.Util.showNoticeMessage("success", "${cmsUtil.getLocaleMessage('label.common.add.success')}");
 						self.loadUnassignedUsers(1);
 						$("#tabContent2 table.datatable").customDatatable().clear();
 						self.isSelectedUnassign = false;

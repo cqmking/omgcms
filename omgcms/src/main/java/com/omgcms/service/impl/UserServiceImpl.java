@@ -1,5 +1,8 @@
 package com.omgcms.service.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -94,7 +97,12 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 	
-
+	@Override
+	public List<User> getUsersByIds(Long[] userIds) {
+		List<Long> userIdList = Arrays.asList(userIds);
+		return userRepository.findAll(userIdList);
+	}
+	
 	@Override
 	public Page<User> findUsers(int pageNo, int pageSize, String orderByProperty, String sortType) {
 
