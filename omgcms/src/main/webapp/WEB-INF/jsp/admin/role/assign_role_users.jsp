@@ -186,11 +186,11 @@ $(function(){
 			
 			init: function(){
 				var self = this;
-				self._loadUser();
+				self._loadRole();
 				self.loadAssignedUsers(1);
 			},
 			
-			_loadUser: function(){
+			_loadRole: function(){
 				var self = this;
 				if(!self.roleId){
 					console.warn("self.roleId is invalid");

@@ -2,6 +2,11 @@ package com.omgcms.web.util;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * 
+ * @author Freddy
+ * @version create date: 2017年7月16日
+ */
 public class ParamUtil {
 	
 	public static int get(Integer value, int defaultValue) {

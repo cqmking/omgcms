@@ -64,7 +64,8 @@
 						  <ul class="dropdown-menu pull-right" role="menu">
 						    <li><a :href="'edit.do?roleId='+role.roleId"><s:message code="label.common.modify"/></a></li>
 						    <li><a href="javascript:;" @click.prevent="deleteObject(role)"><s:message code="label.common.delete"/></a></li>
-						    <li><a href="javascript:;" @click.prevent="assignUsers(role)"><s:message code="label.user.assign.roles"/></a></li>
+						    <li><a href="javascript:;" @click.prevent="assignPermissions(role)"><s:message code="label.role.assign.permissions"/></a></li>
+						    <li><a href="javascript:;" @click.prevent="assignUsers(role)"><s:message code="label.role.assign.users"/></a></li>
 						  </ul>
 						</div>
 					</td>
@@ -246,6 +247,10 @@ $(function(){
 			
 			assignUsers: function(role){
 				location.href="assign_role_users.do?roleId="+role.roleId;
+			},
+			
+			assignPermissions: function(role){
+				location.href="assign_role_permissions.do?roleId="+role.roleId;
 			}
 			
 			

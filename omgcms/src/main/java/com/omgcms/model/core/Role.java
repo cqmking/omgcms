@@ -43,6 +43,9 @@ public class Role implements Serializable {
 
 	@JsonIgnore
 	private Set<GroupRole> groupRoles;
+	
+	@JsonIgnore
+	private Set<ResourcePermission> resourcePermissions; 
 
 	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", initialValue = 1000, allocationSize = 1, pkColumnName = "name", pkColumnValue = "roleId", valueColumnName = "value")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "ID_GENERATOR")
@@ -114,6 +117,15 @@ public class Role implements Serializable {
 
 	public void setGroupRoles(Set<GroupRole> groupRoles) {
 		this.groupRoles = groupRoles;
+	}
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "role", fetch = FetchType.LAZY)
+	public Set<ResourcePermission> getResourcePermissions() {
+		return resourcePermissions;
+	}
+
+	public void setResourcePermissions(Set<ResourcePermission> resourcePermissions) {
+		this.resourcePermissions = resourcePermissions;
 	}
 
 }

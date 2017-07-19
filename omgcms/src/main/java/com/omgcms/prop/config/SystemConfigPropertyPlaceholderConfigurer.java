@@ -19,6 +19,8 @@ public class SystemConfigPropertyPlaceholderConfigurer extends PropertyPlacehold
             Properties props) throws BeansException {
         super.processProperties(beanFactoryToProcess, props);
         
+        logger.debug("Load SystemConfigPropertyPlaceholderConfigurer from property file.");
+        
         Map<String,Object> propertiesMap = new HashMap<String, Object>();
         for (Object key : props.keySet()) {
             String keyStr = key.toString();

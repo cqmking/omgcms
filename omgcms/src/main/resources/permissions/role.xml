@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<permissions>
+	
+	<permission>
+		<!-- <name>com.omgcms.bean.NavigationItem</name> -->
+		<name>com.omgcms.model.core.Role</name>
+		<action>VIEW</action>
+		<action>ADD</action>
+		<action>UPDATE</action>
+		<action>DELETE</action>
+		<action>PERMISSION</action>
+		<action>ASSIGN_USERS</action>
+	</permission>
+	
+</permissions>

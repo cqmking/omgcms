@@ -3,9 +3,12 @@ package com.omgcms.model.core;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
@@ -17,14 +20,18 @@ public class ResourcePermission implements Serializable {
 
 	private Long resourcePermissionId;
 
-	private Long resourceActionId;
-
 	/**
-	 * Resource's PrimaryKey
+	 * Resource's PrimaryKey. Resource entry ID, common value is 0.
 	 */
 	private Long primaryKey;
 
-	private Long roleId;
+	private String resourceName;
+
+	private Long ownerId;
+
+	private ResourceAction resourceAction;
+
+	private Role role;
 
 	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", initialValue = 1000, allocationSize = 1, pkColumnName = "name", pkColumnValue = "resourcePermissionId", valueColumnName = "value")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "ID_GENERATOR")
@@ -37,14 +44,6 @@ public class ResourcePermission implements Serializable {
 		this.resourcePermissionId = resourcePermissionId;
 	}
 
-	public Long getResourceActionId() {
-		return resourceActionId;
-	}
-
-	public void setResourceActionId(Long resourceActionId) {
-		this.resourceActionId = resourceActionId;
-	}
-
 	public Long getPrimaryKey() {
 		return primaryKey;
 	}
@@ -52,13 +51,41 @@ public class ResourcePermission implements Serializable {
 	public void setPrimaryKey(Long primaryKey) {
 		this.primaryKey = primaryKey;
 	}
-
-	public Long getRoleId() {
-		return roleId;
+	
+	public String getResourceName() {
+		return resourceName;
+	}
+	
+	public void setResourceName(String resourceName) {
+		this.resourceName = resourceName;
 	}
 
-	public void setRoleId(Long roleId) {
-		this.roleId = roleId;
+	public Long getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "resourceActionId", nullable = false)
+	public ResourceAction getResourceAction() {
+		return resourceAction;
+	}
+
+	public void setResourceAction(ResourceAction resourceAction) {
+		this.resourceAction = resourceAction;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "roleId", nullable = false)
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 }
