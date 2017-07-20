@@ -131,6 +131,7 @@ public class CommonTest {
 		
 	}
 	
+	
 	@Test
 	public void testParam() throws ClientProtocolException, IOException {
 		
@@ -189,5 +190,6 @@ public class CommonTest {
 		logger.debug("status:[{}] content:[{}]", status, content);
 
 	}
-
+	
+	
 }

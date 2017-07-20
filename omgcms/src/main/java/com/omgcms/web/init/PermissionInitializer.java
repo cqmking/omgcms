@@ -1,4 +1,4 @@
-package com.omgcms.web.util;
+package com.omgcms.web.init;
 
 import java.io.File;
 import java.net.URL;
@@ -21,6 +21,7 @@ import com.omgcms.bean.init.ImportResource;
 import com.omgcms.bean.init.Permission;
 import com.omgcms.bean.init.PermissionRoot;
 import com.omgcms.model.core.ResourceAction;
+import com.omgcms.model.utils.ResourceActionConstants;
 import com.omgcms.service.ResourceActionService;
 import com.omgcms.util.StringPool;
 
@@ -80,14 +81,18 @@ public class PermissionInitializer {
 			for (Permission permission : permissions) {
 
 				String resourceName = permission.getResourceName();
+				String resourceType = permission.getType();
 				List<String> actions = permission.getActions();
+
+				if (resourceType == null || !resourceType.equalsIgnoreCase(ResourceActionConstants.RESOURCE_TYPE_ADMIN)) {
+					resourceType = ResourceActionConstants.RESOURCE_TYPE_RESOURCE.toLowerCase();
+				}
 
 				if (CollectionUtils.isEmpty(actions)) {
 					continue;
 				}
 
-				logger.debug("Start to process permission with resource name [{}], it has {} actions.", resourceName,
-						actions.size());
+				logger.debug("Start to process permission with resource name [{}], it has {} actions.", resourceName, actions.size());
 
 				List<ResourceAction> resourceActionList = resourceActionService.getByResourceName(resourceName);
 
@@ -112,14 +117,14 @@ public class PermissionInitializer {
 					}
 
 				}
-				
+
 				logger.debug("Permission with resource name[{}] has {} new actions will be created.", resourceName, newActions.size());
 
 				long bitwiseValue = getMaxBitwisvalue(resourceActionList);
 
 				for (String newActionId : newActions) {
 					bitwiseValue = bitwiseValue << 1;
-					ResourceAction resourceAction = new ResourceAction(resourceName, newActionId, bitwiseValue);
+					ResourceAction resourceAction = new ResourceAction(resourceName, resourceType, newActionId, bitwiseValue);
 					resourceActionService.save(resourceAction);
 					logger.debug(resourceAction.toString());
 				}
@@ -149,9 +154,16 @@ public class PermissionInitializer {
 
 		List<Permission> permissions = new ArrayList<Permission>();
 
-		permissions.addAll(permissionRoot.getPermissions());
+		if (!CollectionUtils.isEmpty(permissionRoot.getPermissions())) {
+			permissions.addAll(permissionRoot.getPermissions());
+		}
 
 		for (PermissionRoot pRoot : importPermissionRoots) {
+
+			if (CollectionUtils.isEmpty(pRoot.getPermissions())) {
+				continue;
+			}
+			
 			permissions.addAll(pRoot.getPermissions());
 		}
 

@@ -16,7 +16,8 @@ import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Table(name = "resourceaction", uniqueConstraints = { @UniqueConstraint(columnNames = { "resourceName", "actionId" }) })
+@Table(name = "resourceaction", uniqueConstraints = {
+		@UniqueConstraint(columnNames = { "resourceName", "resourceType", "actionId" }) })
 @Entity
 public class ResourceAction implements Serializable {
 
@@ -28,6 +29,8 @@ public class ResourceAction implements Serializable {
 	 * Resource name, may be className, custom resource id and etc.
 	 */
 	private String resourceName;
+
+	private String resourceType;
 
 	private String actionId;
 
@@ -45,10 +48,11 @@ public class ResourceAction implements Serializable {
 	public ResourceAction() {
 
 	}
-	
-	public ResourceAction(String resourceName, String actionId, Long bitwiseValue) {
+
+	public ResourceAction(String resourceName, String resourceType, String actionId, Long bitwiseValue) {
 		this.actionId = actionId;
 		this.resourceName = resourceName;
+		this.resourceType = resourceType;
 		this.bitwiseValue = bitwiseValue;
 	}
 
@@ -69,6 +73,14 @@ public class ResourceAction implements Serializable {
 
 	public void setResourceName(String resourceName) {
 		this.resourceName = resourceName;
+	}
+	
+	public String getResourceType() {
+		return resourceType;
+	}
+
+	public void setResourceType(String resourceType) {
+		this.resourceType = resourceType;
 	}
 
 	public String getActionId() {
@@ -101,5 +113,5 @@ public class ResourceAction implements Serializable {
 		return "ResourceAction [resourceActionId=" + resourceActionId + ", resourceName=" + resourceName + ", actionId=" + actionId
 				+ ", bitwiseValue=" + bitwiseValue + "]";
 	}
-	
+
 }

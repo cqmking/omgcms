@@ -6,7 +6,7 @@ import javax.servlet.ServletContextListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.omgcms.web.util.PermissionInitializer;
+import com.omgcms.web.init.PermissionInitializer;
 
 public class CmsServletListener implements ServletContextListener {
 

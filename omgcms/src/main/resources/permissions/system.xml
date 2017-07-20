@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<permissions type="admin">
+
+	<permission>
+		<name>nav.index</name>
+		<action>VIEW</action>
+	</permission>
+	
+	<permission>
+		<name>nav.content</name>
+		<action>VIEW</action>
+	</permission>
+	
+	<permission>
+		<name>nav.content.model</name>
+		<action>VIEW</action>
+	</permission>
+	
+	<permission>
+		<name>nav.content.sysinfo</name>
+		<action>VIEW</action>
+	</permission>
+	
+	<permission>
+		<name>nav.user</name>
+		<action>VIEW</action>
+	</permission>
+	
+	<permission>
+		<name>nav.role</name>
+		<action>VIEW</action>
+	</permission>
+	
+</permissions>

@@ -14,12 +14,22 @@ public class Permission implements Serializable {
 
 	private static final long serialVersionUID = 6245651882456894518L;
 
+	private String type;
+	
 	@XmlElement(name = "name")
 	private String resourceName;
 	
 	@XmlElement(name = "action")
 	private List<String> actions;
 	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	public String getResourceName() {
 		return resourceName;
 	}
@@ -38,7 +48,7 @@ public class Permission implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Permission [resourceName=" + resourceName + ", actions=" + actions + "]";
+		return "Permission [type=" + type + ", resourceName=" + resourceName + ", actions=" + actions + "]";
 	}
 	
 }
