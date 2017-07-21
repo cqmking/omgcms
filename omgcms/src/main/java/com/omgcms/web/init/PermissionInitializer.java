@@ -84,8 +84,11 @@ public class PermissionInitializer {
 				String resourceType = permission.getType();
 				List<String> actions = permission.getActions();
 
-				if (resourceType == null || !resourceType.equalsIgnoreCase(ResourceActionConstants.RESOURCE_TYPE_ADMIN)) {
+				if (resourceType == null) {
 					resourceType = ResourceActionConstants.RESOURCE_TYPE_RESOURCE.toLowerCase();
+				}else
+				{
+					resourceType = resourceType.toLowerCase();
 				}
 
 				if (CollectionUtils.isEmpty(actions)) {
