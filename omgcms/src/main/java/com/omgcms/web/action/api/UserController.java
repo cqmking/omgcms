@@ -38,9 +38,9 @@ import com.omgcms.web.util.ParamUtil;
  */
 @Controller
 @RequestMapping("/user")
-public class UserAction {
+public class UserController {
 
-	private Logger logger = LoggerFactory.getLogger(UserAction.class);
+	private Logger logger = LoggerFactory.getLogger(UserController.class);
 
 	@Autowired
 	private UserService userService;

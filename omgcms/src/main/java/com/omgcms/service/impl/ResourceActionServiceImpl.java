@@ -18,16 +18,22 @@ public class ResourceActionServiceImpl implements ResourceActionService {
 	private ResourceActionRepository resourceActionRepository;
 	
 	@Override
+	public List<ResourceAction> findAll() {
+		return resourceActionRepository.findAll();
+	}
+	
+	@Override
 	public ResourceAction saveAndFlush(ResourceAction resourceAction) {
+
 		return resourceActionRepository.saveAndFlush(resourceAction);
 	}
 
 	@Override
 	public ResourceAction save(ResourceAction resourceAction) {
-		
+
 		return resourceActionRepository.save(resourceAction);
 	}
-	
+
 	@Override
 	public void flush() {
 		resourceActionRepository.flush();
@@ -37,27 +43,25 @@ public class ResourceActionServiceImpl implements ResourceActionService {
 	public void deleteResourceAction(ResourceAction resourceAction) {
 		resourceActionRepository.delete(resourceAction);
 	}
-	
+
 	@Override
 	public void deleteResourceAction(long resourceActionId) {
 		resourceActionRepository.delete(resourceActionId);
 	}
-	
+
 	@Override
-	public void deleteResourceActions(List<ResourceAction> resourceActions){
+	public void deleteResourceActions(List<ResourceAction> resourceActions) {
 		resourceActionRepository.deleteInBatch(resourceActions);
 	}
-	
+
 	@Override
 	public ResourceAction getByResourceNameAndActionId(String resourceName, long actionId) {
 		return resourceActionRepository.getByResourceNameAndActionId(resourceName, actionId);
 	}
-	
+
 	@Override
 	public List<ResourceAction> getByResourceName(String resourceName) {
 		return resourceActionRepository.getByResourceName(resourceName);
 	}
-
-	
 
 }

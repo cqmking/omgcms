@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.omgcms.service.RealmService;
 
 @Controller
-public class LogoutAction {
+public class LogoutController {
 	
-	private Logger logger = LoggerFactory.getLogger(LogoutAction.class);
+	private Logger logger = LoggerFactory.getLogger(LogoutController.class);
 	
 	@Autowired
 	private RealmService realmService;

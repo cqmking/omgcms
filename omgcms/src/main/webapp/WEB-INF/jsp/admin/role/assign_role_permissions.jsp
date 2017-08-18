@@ -19,6 +19,9 @@
 
 </style>
 
+<script src="${basePath}/thirdparty/ztree/js/jquery.ztree.core.min.js"></script>
+<link href="${basePath}/thirdparty/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+
 </head>
 <body>
 
@@ -39,7 +42,9 @@
 	</section>
 	
 	<section class="section-content" v-show="!loading" style="display: none;">
-		
+		<div class="resource-tree">
+			<!-- 树形菜单 -->
+		</div>
 	</section>
 
 </div>
@@ -92,34 +97,8 @@ $(function(){
 					}
 				});
 				
-			},
-			
-			goToAssignedPage: function(index){
-				var self = this;
-				self.loadAssignedUsers(index);	
-			},
-			
-			
-			loadAssignedUsers: function(index){
-				
-				var self = this;
-				if(!self.roleId){
-					return;
-				}
-				var url = "${basePath}/api/rest/role/assigned-user-list/roleid-" + self.roleId + "/page-" + index + "/page-size-"+self.pageSize;
-				
-				CMS.Util.sendJsonRequest({
-					url: url,
-					method: "GET",
-					errorMsgContainer: $(".section-content"),
-					prependError: false,
-					success: function(data){
-						self.assignedUserPage = data;
-						
-					}
-				});
-				
 			}
+			
 			
 		}
 		

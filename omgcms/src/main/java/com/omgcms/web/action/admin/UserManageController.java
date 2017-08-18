@@ -11,9 +11,9 @@ import com.omgcms.web.util.ParamUtil;
 
 @Controller
 @RequestMapping("/user")
-public class UserManageAction {
+public class UserManageController {
 
-	private Logger logger = LoggerFactory.getLogger(UserManageAction.class);
+	private Logger logger = LoggerFactory.getLogger(UserManageController.class);
 
 	@RequestMapping("/index.do")
 	public String index(Model model) {
