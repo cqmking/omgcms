@@ -37,12 +37,29 @@
 			</li>
 		</ol>
 	</section>
-	
-	<section class="section-content" v-show="!loading" style="display: none;">
-		
-	</section>
 
-</div>
+	<section class="section-content" v-show="!loading" style="display: none;">
+
+		<h5 style="margin-bottom: 10px;"><s:message code="label.common.current.role" />：{{currentRole.name}}</h5>
+
+		<div class="container-fluid" style="padding: 0;">
+			<div class="col-md-4" style="padding-left:0;">
+				<div class="panel">
+					<div class="panel-heading"><s:message code="label.common.sys.res" /></div>
+					<div class="panel-body">内容,tree</div>
+				</div>
+			</div>
+			<div class="col-md-8" style="padding-right:0;">
+				<div class="panel">
+					<div class="panel-heading"><s:message code="label.common.sys.res.permissions" /></div>
+					<div class="panel-body">内容,list, check items</div>
+				</div>
+			</div>
+		</div>
+
+		</section>
+
+	</div>
 
 <script type="text/javascript">
 $(function(){
@@ -92,34 +109,9 @@ $(function(){
 					}
 				});
 				
-			},
-			
-			goToAssignedPage: function(index){
-				var self = this;
-				self.loadAssignedUsers(index);	
-			},
-			
-			
-			loadAssignedUsers: function(index){
-				
-				var self = this;
-				if(!self.roleId){
-					return;
-				}
-				var url = "${basePath}/api/rest/role/assigned-user-list/roleid-" + self.roleId + "/page-" + index + "/page-size-"+self.pageSize;
-				
-				CMS.Util.sendJsonRequest({
-					url: url,
-					method: "GET",
-					errorMsgContainer: $(".section-content"),
-					prependError: false,
-					success: function(data){
-						self.assignedUserPage = data;
-						
-					}
-				});
-				
 			}
+			
+			
 			
 		}
 		
