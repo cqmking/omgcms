@@ -5,7 +5,7 @@ The type value may be [recreate, update]. Recreate will delete all permission ac
 -->
 <permissions>
 	
-	<import resource="/permissions/system.xml" />
+	<import resource="/permissions/navigation.xml" />
 	
 	<import resource="/permissions/models.xml" />
 	

@@ -22,9 +22,9 @@ import com.omgcms.model.core.User;
 import com.omgcms.service.UserService;
 
 @Controller
-public class LoginAction {
+public class LoginController {
 
-	private Logger logger = LoggerFactory.getLogger(HomeIndexAction.class);
+	private Logger logger = LoggerFactory.getLogger(HomeIndexController.class);
 
 	@Autowired
 	private UserService userService;

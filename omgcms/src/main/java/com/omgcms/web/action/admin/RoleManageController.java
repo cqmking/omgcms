@@ -11,9 +11,9 @@ import com.omgcms.web.util.ParamUtil;
 
 @Controller
 @RequestMapping("/role")
-public class RoleManageAction {
+public class RoleManageController {
 
-	private Logger logger = LoggerFactory.getLogger(RoleManageAction.class);
+	private Logger logger = LoggerFactory.getLogger(RoleManageController.class);
 	
 	@RequestMapping("/index.do")
 	public String index(Model model) {

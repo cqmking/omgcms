@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.omgcms.util.CmsUtil;
 
 @Controller
-public class HomeIndexAction {
+public class HomeIndexController {
 
-	private Logger logger = LoggerFactory.getLogger(HomeIndexAction.class);
+	private Logger logger = LoggerFactory.getLogger(HomeIndexController.class);
 
 	@RequestMapping("/index.do")
 	public String index(Model model) {

@@ -74,7 +74,7 @@ public class ResourceAction implements Serializable {
 	public void setResourceName(String resourceName) {
 		this.resourceName = resourceName;
 	}
-	
+
 	public String getResourceType() {
 		return resourceType;
 	}

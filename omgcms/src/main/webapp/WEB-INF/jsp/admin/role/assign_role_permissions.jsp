@@ -19,6 +19,9 @@
 
 </style>
 
+<script src="${basePath}/thirdparty/ztree/js/jquery.ztree.core.min.js"></script>
+<link href="${basePath}/thirdparty/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
+
 </head>
 <body>
 

@@ -29,9 +29,9 @@ import com.omgcms.web.util.ParamUtil;
 
 @Controller
 @RequestMapping("/role")
-public class RoleAction {
+public class RoleController {
 
-	private Logger logger = LoggerFactory.getLogger(RoleAction.class);
+	private Logger logger = LoggerFactory.getLogger(RoleController.class);
 
 	@Autowired
 	private UserService userService;

@@ -6,6 +6,8 @@ import com.omgcms.model.core.ResourceAction;
 
 public interface ResourceActionService {
 
+	List<ResourceAction> findAll();
+	
 	ResourceAction saveAndFlush(ResourceAction resourceAction);
 	
 	ResourceAction save(ResourceAction resourceAction);
