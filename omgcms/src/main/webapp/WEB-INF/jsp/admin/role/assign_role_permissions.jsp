@@ -74,8 +74,8 @@ $(function(){
 		data: {
 			loading: false,
 			currentRole: {},
-			pageSize: 20,
-			roleId: ${roleId}
+			roleId: ${roleId},
+			resActions: []
 			
 		},
 		
@@ -94,6 +94,7 @@ $(function(){
 			init: function(){
 				var self = this;
 				self._loadRole();
+				self.loadResourceActions();
 			},
 			
 			_loadRole: function(){
@@ -112,6 +113,19 @@ $(function(){
 					}
 				});
 				
+			},
+			
+			loadResourceActions: function(){
+				var self = this;
+				CMS.Util.sendJsonRequest({
+					url: "${basePath}/api/rest/resource/list/all-in-map",
+					method: "GET",
+					params: "",
+					errorMsgContainer: $(".section-content"),
+					success: function(data){
+						self.resActions = data;
+					}
+				});
 			}
 			
 			
