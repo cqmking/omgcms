@@ -12,6 +12,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+/**
+ * @author luffy
+ *
+ */
 @Table(name = "resourcepermission")
 @Entity
 public class ResourcePermission implements Serializable {
@@ -21,16 +25,16 @@ public class ResourcePermission implements Serializable {
 	private Long resourcePermissionId;
 
 	/**
-	 * Resource's PrimaryKey. Resource entry ID, common value is 0.
+	 * Resource's PrimaryKey. Resource entry's primary ID, common/system value is 0.
 	 */
 	private Long primaryKey;
 
 	private String resourceName;
-
+	
 	private Long ownerId;
 
-	private ResourceAction resourceAction;
-
+	private Long actionIds;
+	
 	private Role role;
 
 	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", initialValue = 1000, allocationSize = 1, pkColumnName = "name", pkColumnValue = "resourcePermissionId", valueColumnName = "value")
@@ -67,15 +71,13 @@ public class ResourcePermission implements Serializable {
 	public void setOwnerId(Long ownerId) {
 		this.ownerId = ownerId;
 	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "resourceActionId", nullable = false)
-	public ResourceAction getResourceAction() {
-		return resourceAction;
+	
+	public Long getActionIds() {
+		return actionIds;
 	}
 
-	public void setResourceAction(ResourceAction resourceAction) {
-		this.resourceAction = resourceAction;
+	public void setActionIds(Long actionIds) {
+		this.actionIds = actionIds;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

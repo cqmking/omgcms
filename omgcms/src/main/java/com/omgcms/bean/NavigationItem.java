@@ -15,7 +15,7 @@ public class NavigationItem {
 	private String target;
 
 	private String cssClass;
-
+	
 	private String iconClass;
 
 	private List<NavigationItem> subNavigations;
