@@ -29,5 +29,5 @@ public class HomeIndexController {
 		
 		return "admin/system_info";
 	}
-
+	
 }

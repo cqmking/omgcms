@@ -49,7 +49,7 @@
 			<div class="col-md-4" style="padding-left:0;">
 				<div class="panel">
 					<div class="panel-heading"><s:message code="label.common.sys.res" /></div>
-					<div class="panel-body">内容,tree</div>
+					<div class="panel-body">内容,tree{{ $t("message.hello") }}</div>
 				</div>
 			</div>
 			<div class="col-md-8" style="padding-right:0;">
@@ -67,7 +67,11 @@
 <script type="text/javascript">
 $(function(){
 	
+	var i18n = loadLanages("${locale}");
+	
 	var pageVue = new Vue({
+		
+		i18n,
 		
 		el: '#page-content',
 		

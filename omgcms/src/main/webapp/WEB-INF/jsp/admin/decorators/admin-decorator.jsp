@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -11,8 +13,14 @@
 
 <script src="${basePath}/thirdparty/vue/vue.js"></script>
 <script src="${basePath}/thirdparty/vue-form/vue-form.min.js"></script>
+<script src="${basePath}/thirdparty/vue-i18n/vue-i18n.js"></script>
 
 <script src="${basePath}/thirdparty/moment/moment.min.js"></script>
+
+<script src="${basePath}/js/common/lang/${defaultLocale}.js"></script>
+<c:if test="${!empty locale}">
+	<script src="${basePath}/js/common/lang/${locale}.js"></script>
+</c:if>
 
 <script src="${basePath}/js/component.js"></script>
 <script src="${basePath}/js/main.js"></script>
