@@ -19,7 +19,7 @@
 
 </style>
 
-<script src="${basePath}/thirdparty/ztree/js/jquery.ztree.core.min.js"></script>
+<script src="${basePath}/thirdparty/ztree/js/jquery.ztree.all.min.js"></script>
 <link href="${basePath}/thirdparty/ztree/css/zTreeStyle/zTreeStyle.css" rel="stylesheet">
 
 </head>
@@ -49,14 +49,27 @@
 			<div class="col-md-4" style="padding-left:0;">
 				<div class="panel">
 					<div class="panel-heading"><s:message code="label.common.sys.res" /></div>
-					<div class="panel-body">内容,tree{{ $t("message.hello") }}</div>
+					<div class="panel-body" style="min-height: 300px;">
+						<div id="resourceTree" class="zTreeCust ztree"></div>
+					</div>
 				</div>
 			</div>
 			<div class="col-md-8" style="padding-right:0;">
-				<div class="panel">
-					<div class="panel-heading"><s:message code="label.common.sys.res.permissions" /></div>
-					<div class="panel-body">内容,list, check items</div>
-				</div>
+				<div v-show="showResActsTable"><s:message code="label.common.sys.res.permissions" />{{ currentResAction.name }}</div>
+				<table class="table table-bordered datatable table-hover" v-show="showResActsTable">
+					<thead>
+						<tr>
+							<th data-index="check" class="check-all check-btn"><i class="icon-check-empty"></i></th>
+							<th><s:message code="label.common.operation" /></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="(resAction, index) in currentResActions">
+							<td data-index="check" :data-id="resAction.resourceActionId" class="check-row check-btn"><i class="icon-check-empty"></i></td>
+							<td>{{ $t("message.operations."+resAction.actionId) }}</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 
@@ -68,6 +81,7 @@
 $(function(){
 	
 	var i18n = loadLanages("${locale}");
+	var zTreeObj = {};
 	
 	var pageVue = new Vue({
 		
@@ -79,8 +93,16 @@ $(function(){
 			loading: false,
 			currentRole: {},
 			roleId: ${roleId},
-			resActions: []
-			
+			resActions: [],
+			currentResActions: [],
+			currentResAction: {}
+		},
+		
+		computed: {
+			showResActsTable: function(){
+				var self = this;
+				return self.currentResActions.length > 0;
+			}
 		},
 		
 		updated: function(){
@@ -91,6 +113,7 @@ $(function(){
 		mounted: function(){
 			var self = this;
 			self.init();
+			
 		},
 		
 		methods: {
@@ -114,6 +137,7 @@ $(function(){
 					errorMsgContainer: $(".section-content"),
 					success: function(data){
 						self.currentRole = data;
+						
 					}
 				});
 				
@@ -128,10 +152,97 @@ $(function(){
 					errorMsgContainer: $(".section-content"),
 					success: function(data){
 						self.resActions = data;
+						// 加载完毕，初始化资源树菜单
+						self.loadZTree();
+					}
+				});
+			},
+			
+			getResourceActionsTreeData: function(){
+				var self = this;
+				
+				var nodes = [];
+				
+				var count = 1;
+				for(var pkey in self.resActions){
+					
+					var node = {};
+					var children = self.resActions[pkey];
+					var distinctChildren = [];
+					
+					for(var k=0; k<children.length; k++){
+						
+						var childItem = children[k];
+						
+						if(self._checkResActExist(childItem, distinctChildren)){
+							// 如果已经存在，继续下一个
+							continue;
+						}
+						
+						var msgKey = childItem.resourceName.replace(/\./g, "_");
+						childItem["name"] = self.$t("message." + msgKey);
+						childItem["isParent"] = false;
+						
+						distinctChildren.push(childItem);
+					}
+					
+					node = {
+						name: self.$t("message.system." + pkey),
+						itemId: count,
+						isParent: true,
+						children: distinctChildren
+					};
+					
+					nodes.push(node);
+					count++;
+				}
+				
+				return nodes;
+			},
+			
+			_checkResActExist: function(item, resActs){
+				
+				for(var j=0; j< resActs.length; j++){
+					var _child = resActs[j];
+					if(_child.resourceName == item.resourceName 
+							&& _child.resourceType == item.resourceType){
+						return true;
+					}
+				}
+				return false;
+			},
+			
+			loadZTree: function(){
+				var self = this;
+				var nodes = self.getResourceActionsTreeData();
+				var setting = {
+					callback: {
+						onClick: function(event, treeId, node){
+							self.loadSelectedResActs(node.resourceName);
+							self.currentResAction = JSON.parse(JSON.stringify(node));
+							self.currentResAction["name"] = "-["+self.currentResAction.name+"]";
+						}
+					}
+				};
+				zTreeObj = $.fn.zTree.init($("#resourceTree"), setting, nodes);
+				
+			},
+			
+			loadSelectedResActs: function(resourceName){
+				var self = this;
+				CMS.Util.sendJsonRequest({
+					url: "${basePath}/api/rest/resource/list/resourceName",
+					method: "GET",
+					params: {
+						resourceName: resourceName
+					},
+					errorMsgContainer: $(".section-content"),
+					success: function(data){
+						self.currentResActions = data;
+						
 					}
 				});
 			}
-			
 			
 			
 		}

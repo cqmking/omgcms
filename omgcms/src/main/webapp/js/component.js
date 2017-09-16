@@ -288,7 +288,7 @@
 					   if(options.complete){
 						   options.complete(XMLHttpRequest, status);
 					   }
-					   console.log("complete");
+					   console.log("sendJsonRequest complete");
 					   instance._stopSpinning($container);
 				   }
 				});

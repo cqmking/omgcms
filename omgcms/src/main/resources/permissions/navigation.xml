@@ -13,12 +13,12 @@
 	</permission>
 	
 	<permission>
-		<name>nav.content.model</name>
+		<name>nav.model</name>
 		<action>VIEW</action>
 	</permission>
 	
 	<permission>
-		<name>nav.content.sysinfo</name>
+		<name>nav.sysinfo</name>
 		<action>VIEW</action>
 	</permission>
 	
