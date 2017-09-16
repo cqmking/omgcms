@@ -281,6 +281,8 @@
 								instance.showErrorMessage(errorMsg, $container);
 							}
 							
+						}else{
+							instance.showErrorMessage("No response from server.", $container, true);
 						}
 
 					},

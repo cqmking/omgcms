@@ -218,9 +218,14 @@ $(function(){
 				var setting = {
 					callback: {
 						onClick: function(event, treeId, node){
-							self.loadSelectedResActs(node.resourceName);
-							self.currentResAction = JSON.parse(JSON.stringify(node));
-							self.currentResAction["name"] = "-["+self.currentResAction.name+"]";
+							if(self.currentResAction.resourceName == node.resourceName){
+								return;
+							}
+							self.loadSelectedResActs(node.resourceName, function(){
+								self.currentResAction = JSON.parse(JSON.stringify(node));
+								self.currentResAction["name"] = "-["+self.currentResAction.name+"]";
+							});
+							
 						}
 					}
 				};
@@ -228,7 +233,7 @@ $(function(){
 				
 			},
 			
-			loadSelectedResActs: function(resourceName){
+			loadSelectedResActs: function(resourceName, successCallback){
 				var self = this;
 				CMS.Util.sendJsonRequest({
 					url: "${basePath}/api/rest/resource/list/resourceName",
@@ -239,7 +244,7 @@ $(function(){
 					errorMsgContainer: $(".section-content"),
 					success: function(data){
 						self.currentResActions = data;
-						
+						successCallback();
 					}
 				});
 			}
