@@ -13,7 +13,7 @@
 	</permission>
 	
 	<permission>
-		<name>nav.model</name>
+		<name>nav.content.model</name>
 		<action>VIEW</action>
 	</permission>
 	

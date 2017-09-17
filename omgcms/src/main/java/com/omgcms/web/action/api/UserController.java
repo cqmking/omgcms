@@ -82,7 +82,7 @@ public class UserController {
 
 	@ResponseBody
 	@RequestMapping(value = "/delete/{userId}", method = RequestMethod.DELETE)
-	public boolean deleteUser(@PathVariable(value = "userId") Integer userId) {
+	public boolean deleteUser(@PathVariable(value = "userId") Long userId) {
 
 		userId = ParamUtil.get(userId, -1);
 
@@ -138,7 +138,7 @@ public class UserController {
 		Date now = new Date();
 		user.setCreateDate(now);
 		user.setModifyDate(now);
-
+		
 		User savedUser = userService.saveAndFlush(user);
 
 		return savedUser;

@@ -23,6 +23,11 @@ public class ResourceActionServiceImpl implements ResourceActionService {
 	}
 	
 	@Override
+	public List<ResourceAction> findAll(Iterable<Long> ids) {
+		return resourceActionRepository.findAll(ids);
+	}
+	
+	@Override
 	public ResourceAction saveAndFlush(ResourceAction resourceAction) {
 
 		return resourceActionRepository.saveAndFlush(resourceAction);
@@ -63,5 +68,5 @@ public class ResourceActionServiceImpl implements ResourceActionService {
 	public List<ResourceAction> getByResourceName(String resourceName) {
 		return resourceActionRepository.getByResourceName(resourceName);
 	}
-
+	
 }

@@ -56,7 +56,7 @@
 			</div>
 			<div class="col-md-8" style="padding-right:0;">
 				<div v-show="showResActsTable"><s:message code="label.common.sys.res.permissions" />{{ currentResAction.name }}</div>
-				<table class="table table-bordered datatable table-hover" v-show="showResActsTable">
+				<table class="table table-bordered datatable table-hover permission" v-show="showResActsTable">
 					<thead>
 						<tr>
 							<th data-index="check" class="check-all check-btn"><i class="icon-check-empty"></i></th>
@@ -65,11 +65,14 @@
 					</thead>
 					<tbody>
 						<tr v-for="(resAction, index) in currentResActions">
-							<td data-index="check" :data-id="resAction.resourceActionId" class="check-row check-btn"><i class="icon-check-empty"></i></td>
+							<td data-index="check" :data-id="resAction.resourceActionId" :class="['check-row check-btn', {'checked' : resAction.checked}]"><i class="icon-check-empty"></i></td>
 							<td>{{ $t("message.operations."+resAction.actionId) }}</td>
 						</tr>
 					</tbody>
 				</table>
+				<div class="tool-bar" v-show="showResActsTable">
+					<button class="btn btn-primary" type="button" @click.prevent="saveResourcePermission"><s:message code="label.common.save" /></button>
+				</div>
 			</div>
 		</div>
 
@@ -107,7 +110,7 @@ $(function(){
 		
 		updated: function(){
 			var self = this;
-			
+			var $dataTable = $("table.datatable.permission").customDatatable({create: true});
 		},
 		
 		mounted: function(){
@@ -243,12 +246,79 @@ $(function(){
 					},
 					errorMsgContainer: $(".section-content"),
 					success: function(data){
+						$("table.datatable.permission").customDatatable().clear();
+						data.forEach(function(resAct){
+							resAct["checked"] = false;
+						});
 						self.currentResActions = data;
 						successCallback();
+						self.loadResourcePermission(resourceName);
 					}
 				});
-			}
+				
+			},
 			
+			// 加载已经设置的资源权限
+			loadResourcePermission: function(resourceName){
+				var self = this;
+				CMS.Util.sendJsonRequest({
+					url: "${basePath}/api/rest/resource/loadResourcePermission",
+					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+					method: "POST",
+					params: {
+						roleId: self.currentRole.roleId,
+						resourceName: resourceName
+					},
+					errorMsgContainer: $(".section-content"),
+					success: function(data){
+						self.markCheckedItems(data);
+					}
+				});
+			},
+			
+			saveResourcePermission: function(){
+				var self = this;
+				var resActsIds = $("table.datatable.permission").customDatatable({create: false}).getSelectIds();
+				console.log("ID:"+resActsIds);
+				
+				CMS.Util.sendJsonRequest({
+					url: "${basePath}/api/rest/resource/addResourcePermissions",
+					contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+					method: "POST",
+					params: {
+						roleId: self.currentRole.roleId,
+						resActIds: resActsIds.join(","),
+						resourceName: self.currentResAction.resourceName
+					},
+					errorMsgContainer: $(".section-content"),
+					success: function(data){
+						//self.currentResActions = data;
+						//console.log(data);
+						CMS.Util.showNoticeMessage("success", "${cmsUtil.getLocaleMessage('message.update.success')}");
+					}
+				});
+				
+			},
+			
+			markCheckedItems: function(checkedItems){
+				var self = this;
+				
+				self.currentResActions.forEach(function(resAct){
+					
+					resAct["checked"] = false;
+					
+					for(var i=0;i<checkedItems.length;i++){
+						
+						var item = checkedItems[i];
+						
+						if(resAct.resourceName == item.resourceName 
+								&& (resAct.bitwiseValue & item.actionIds) > 0){
+							resAct["checked"] = true;
+						}
+					}
+					
+				});
+			}
 			
 		}
 		
