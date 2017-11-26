@@ -65,21 +65,21 @@ public class LoadVariableInterceptor implements HandlerInterceptor {
 
 	private String getBasePath(HttpServletRequest request) {
 
-		String serverName = request.getServerName();
-		String scheme = request.getScheme();
-		int serverPort = request.getServerPort();
-		String contextPath = request.getContextPath();
+//		String serverName = request.getServerName();
+//		String scheme = request.getScheme();
+//		int serverPort = request.getServerPort();
+//		String contextPath = request.getContextPath();
+//
+//		String basePath = StringPool.BLANK;
+//
+//		if (80 == serverPort) {
+//			basePath = scheme.concat(StringPool.COLON).concat(StringPool.DOUBLE_SLASH).concat(serverName)
+//					.concat(contextPath);
+//		} else {
+//			basePath = scheme.concat(StringPool.COLON).concat(StringPool.DOUBLE_SLASH).concat(serverName)
+//					.concat(StringPool.COLON).concat(String.valueOf(serverPort)).concat(contextPath);
+//		}
 
-		String basePath = StringPool.BLANK;
-
-		if (80 == serverPort) {
-			basePath = scheme.concat(StringPool.COLON).concat(StringPool.DOUBLE_SLASH).concat(serverName)
-					.concat(contextPath);
-		} else {
-			basePath = scheme.concat(StringPool.COLON).concat(StringPool.DOUBLE_SLASH).concat(serverName)
-					.concat(StringPool.COLON).concat(String.valueOf(serverPort)).concat(contextPath);
-		}
-
-		return basePath;
+		return request.getContextPath();
 	}
 }

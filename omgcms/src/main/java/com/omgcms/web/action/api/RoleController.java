@@ -216,6 +216,12 @@ public class RoleController {
 		return true;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "/addResPemissions/roleid-{roleId}/{userIds}", method = { RequestMethod.POST, RequestMethod.PUT,
+			RequestMethod.DELETE })
+	public void addResourcePermission() {
+		
+	}
 	
 	private boolean validateRole(Role role, boolean isNew) {
 
@@ -251,5 +257,7 @@ public class RoleController {
 
 		return true;
 	}
+	
+	
 
 }
