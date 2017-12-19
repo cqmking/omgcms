@@ -9,5 +9,9 @@
 	
 	<div>Hello world!</div>
 	
+	<%
+	response.sendRedirect("admin/index.do");
+	%>
+	
 </body>
 </html>

@@ -10,15 +10,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.omgcms.admin.util.Config;
+import com.omgcms.bean.RestResponse;
+import com.omgcms.exception.CmsExceptionConstants;
+import com.omgcms.exception.CmsRuntimeException;
 import com.omgcms.model.core.Role;
 import com.omgcms.model.core.User;
 import com.omgcms.model.core.UserRole;
@@ -27,6 +29,7 @@ import com.omgcms.service.UserRoleService;
 import com.omgcms.service.UserService;
 import com.omgcms.util.CmsConstants;
 import com.omgcms.util.CmsUtil;
+import com.omgcms.util.RestResponseGenerator;
 import com.omgcms.util.StringPool;
 import com.omgcms.web.util.ParamUtil;
 
@@ -36,7 +39,7 @@ import com.omgcms.web.util.ParamUtil;
  * @author Freddy
  * @version create date: 2017年5月11日
  */
-@Controller
+@RestController
 @RequestMapping("/user")
 public class UserController {
 
@@ -48,10 +51,9 @@ public class UserController {
 	private RoleService roleService;
 	@Autowired
 	private UserRoleService userRoleService;
-
-	@ResponseBody
+	
 	@RequestMapping(value = "/list/page-{pageNum}/page-size-{pageSize}", method = RequestMethod.GET)
-	public Page<User> getUserList(@PathVariable(value = "pageNum") Integer pageNum,
+	public RestResponse<Page<User>> getUserList(@PathVariable(value = "pageNum") Integer pageNum,
 			@PathVariable(value = "pageSize") Integer pageSize) {
 
 		pageNum = ParamUtil.get(pageNum, 1);
@@ -59,10 +61,15 @@ public class UserController {
 
 		Page<User> usersPage = userService.findUsers(pageNum, pageSize, "userId", CmsConstants.ORDER_ASC);
 
-		return usersPage;
+		if(usersPage!=null) {
+			throw new CmsRuntimeException(CmsExceptionConstants.ERROR_OBJECT_NOT_EXIST, "Not exist error!");
+		}
+		
+		return RestResponseGenerator.genSuccessResult(usersPage);
+		
 	}
 
-	@ResponseBody
+	
 	@RequestMapping(value = "/userid/{userId}", method = RequestMethod.GET)
 	public User getUser(@PathVariable(value = "userId") Integer userId) {
 
@@ -80,7 +87,7 @@ public class UserController {
 
 	}
 
-	@ResponseBody
+	
 	@RequestMapping(value = "/delete/{userId}", method = RequestMethod.DELETE)
 	public boolean deleteUser(@PathVariable(value = "userId") Integer userId) {
 
@@ -91,7 +98,7 @@ public class UserController {
 		return true;
 	}
 
-	@ResponseBody
+	
 	@RequestMapping(value = "/batchDelete/{userIds}", method = RequestMethod.DELETE)
 	public boolean deleteUsers(@PathVariable(value = "userIds") String userIds) {
 
@@ -112,7 +119,7 @@ public class UserController {
 		return true;
 	}
 
-	@ResponseBody
+	
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public User createUser(@RequestBody User user, @RequestParam(required = false) String password) {
 
@@ -144,7 +151,7 @@ public class UserController {
 		return savedUser;
 	}
 
-	@ResponseBody
+	
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	public User updateUser(@RequestBody User user, @RequestParam(required = false) String password) {
 
@@ -166,7 +173,7 @@ public class UserController {
 		return savedUser;
 	}
 
-	@ResponseBody
+	
 	@RequestMapping(value = "/user-role-list/userid-{userId}/page-{pageNum}/page-size-{pageSize}", method = RequestMethod.GET)
 	public Page<Role> getUserRoleList(@PathVariable(value = "userId") Long userId, @PathVariable(value = "pageNum") Integer pageNum,
 			@PathVariable(value = "pageSize") Integer pageSize) {
@@ -180,7 +187,7 @@ public class UserController {
 		return pageRoles;
 	}
 
-	@ResponseBody
+	
 	@RequestMapping(value = "/unassigned-user-role-list/userid-{userId}/page-{pageNum}/page-size-{pageSize}", method = RequestMethod.GET)
 	public Page<Role> getUnassignedUserRoleList(@PathVariable(value = "userId") Long userId,
 			@PathVariable(value = "pageNum") Integer pageNum, @PathVariable(value = "pageSize") Integer pageSize) {
@@ -194,7 +201,7 @@ public class UserController {
 		return pageRoles;
 	}
 
-	@ResponseBody
+	
 	@RequestMapping(value = "/remove-user-roles/userid-{userId}/{roleIds}", method = { RequestMethod.POST, RequestMethod.PUT,
 			RequestMethod.DELETE })
 	public boolean removeUserRoles(@PathVariable(value = "userId") Long userId, @PathVariable(value = "roleIds") String roleIds) {
@@ -219,8 +226,8 @@ public class UserController {
 
 		return true;
 	}
-
-	@ResponseBody
+	
+	
 	@RequestMapping(value = "/add-user-roles/userid-{userId}/{roleIds}", method = { RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE })
 	public List<UserRole> addUserRoles(@PathVariable(value = "userId") Long userId, @PathVariable(value = "roleIds") String roleIds) {
 		
