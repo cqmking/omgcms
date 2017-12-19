@@ -259,10 +259,16 @@
 				
 				var $container = instance._showSpinning(options.errorMsgContainer);
 				
+				var contentType = "application/json";	//Default
+				
+				if(options.contentType){
+					contentType = options.contentType;
+				}
+				
 				$.ajax({
 				   type: options.method,
 				   dataType: "json",
-				   contentType: "application/json",
+				   contentType: contentType,
 				   url: options.url,
 				   data: options.params,
 				   success: function(data, status){

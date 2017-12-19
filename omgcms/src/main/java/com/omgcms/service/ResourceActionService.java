@@ -8,6 +8,8 @@ public interface ResourceActionService {
 
 	List<ResourceAction> findAll();
 	
+	List<ResourceAction> findAll(Iterable<Long> ids);
+	
 	ResourceAction saveAndFlush(ResourceAction resourceAction);
 	
 	ResourceAction save(ResourceAction resourceAction);

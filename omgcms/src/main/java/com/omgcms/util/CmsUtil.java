@@ -4,12 +4,14 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.omgcms.bean.SystemInfo;
 import com.omgcms.exception.ExceptionI18nMessage;
+import com.omgcms.model.core.User;
 
 public class CmsUtil {
 
@@ -54,7 +56,7 @@ public class CmsUtil {
 		return sysInfo;
 
 	}
-	
+
 	public static String objectToJsonString(Object dataObject) {
 
 		try {
@@ -76,17 +78,17 @@ public class CmsUtil {
 
 		return "";
 	}
-	
-	public static void setSessionMessage(HttpServletRequest request, String msgCode){
+
+	public static void setSessionMessage(HttpServletRequest request, String msgCode) {
 		request.getSession().setAttribute(CmsConstants.SESSION_MSG_KEY, msgCode);
 	}
-	
-	public static String getAndClearSessionMessage(HttpServletRequest request){
-		String msg = (String)request.getSession().getAttribute(CmsConstants.SESSION_MSG_KEY);
+
+	public static String getAndClearSessionMessage(HttpServletRequest request) {
+		String msg = (String) request.getSession().getAttribute(CmsConstants.SESSION_MSG_KEY);
 		request.getSession().removeAttribute(CmsConstants.SESSION_MSG_KEY);
 		return msg;
 	}
-	
+
 	public static String getLocaleMessage(String msgKeyCode) {
 		return ExceptionI18nMessage.getLocaleMessage(msgKeyCode);
 	}
@@ -102,6 +104,26 @@ public class CmsUtil {
 	public static String md5encodePassword(String password, String salt) {
 		String md5password = new SimpleHash("md5", password, salt, 2).toHex();
 		return md5password;
+	}
+	
+	/**
+	 * Get current login user
+	 * @return User
+	 */
+	public static User getCurrentUser() {
+		Object principal = SecurityUtils.getSubject().getPrincipal();
+		if (principal != null) {
+			return (User) principal;
+		}
+		return null;
+	}
+	
+	/**
+	 * Check is user logged in
+	 * @return if login return {@code true}, else return {@code false}
+	 */
+	public static boolean isLoggedIn(){
+		return SecurityUtils.getSubject().isAuthenticated();
 	}
 
 }

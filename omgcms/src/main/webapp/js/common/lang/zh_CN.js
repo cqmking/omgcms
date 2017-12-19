@@ -18,7 +18,7 @@ function getDefaultMessage() {
 			},
 			nav_index: "首页",
 			nav_content: "内容管理",
-			nav_model: "模型管理",
+			nav_content_model: "模型管理",
 			nav_user: "用户管理",
 			nav_role: "角色管理",
 			nav_sysinfo: "系统信息",

@@ -11,12 +11,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import javax.persistence.UniqueConstraint;
 
 /**
  * @author luffy
  *
  */
-@Table(name = "resourcepermission")
+@Table(name = "resourcepermission", uniqueConstraints = {
+		@UniqueConstraint(columnNames = { "primaryKey", "resourceName", "roleId", "ownerId" }) })
 @Entity
 public class ResourcePermission implements Serializable {
 
@@ -25,16 +27,20 @@ public class ResourcePermission implements Serializable {
 	private Long resourcePermissionId;
 
 	/**
-	 * Resource's PrimaryKey. Resource entry's primary ID, common/system value is 0.
+	 * Resource's PrimaryKey. Resource entry's primary ID, common/system value
+	 * is 0.
 	 */
 	private Long primaryKey;
 
 	private String resourceName;
-	
+
 	private Long ownerId;
 
+	/**
+	 * The actionId's values, for wise value. (2, 4, 8, 16 etc.)
+	 */
 	private Long actionIds;
-	
+
 	private Role role;
 
 	@TableGenerator(name = "ID_GENERATOR", table = "idgenerator", initialValue = 1000, allocationSize = 1, pkColumnName = "name", pkColumnValue = "resourcePermissionId", valueColumnName = "value")
@@ -55,11 +61,11 @@ public class ResourcePermission implements Serializable {
 	public void setPrimaryKey(Long primaryKey) {
 		this.primaryKey = primaryKey;
 	}
-	
+
 	public String getResourceName() {
 		return resourceName;
 	}
-	
+
 	public void setResourceName(String resourceName) {
 		this.resourceName = resourceName;
 	}
@@ -71,7 +77,7 @@ public class ResourcePermission implements Serializable {
 	public void setOwnerId(Long ownerId) {
 		this.ownerId = ownerId;
 	}
-	
+
 	public Long getActionIds() {
 		return actionIds;
 	}
